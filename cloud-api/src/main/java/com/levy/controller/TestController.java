@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class TestController {
 
     @Operation(summary="获取测试数据")
-    @PostMapping("get")
+    @GetMapping("get")
     public String get(@RequestBody TestDto testDto){
         return "OK";
     }

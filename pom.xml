@@ -11,6 +11,7 @@
     <modules>
         <module>cloud-api</module>
         <module>common</module>
+        <module>cloud-collect</module>
     </modules>
 
 
@@ -29,19 +30,26 @@
         <hutool-all.version>5.8.16</hutool-all.version>
         <lombok.version>1.18.20</lombok.version>
         <knife4j.version>4.4.0</knife4j.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <spring-cloud-context.version>4.0.4</spring-cloud-context.version>
+        <spring-cloud-starter-bootstrap.version>4.0.0</spring-cloud-starter-bootstrap.version>
+        <spring-cloud-starter-alibaba-nacos.version>2022.0.0.0</spring-cloud-starter-alibaba-nacos.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-
+            <!--      spring cloud      -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--     自己的common       -->
             <dependency>
                 <groupId>com.levy</groupId>
                 <artifactId>common</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.dtsw</groupId>
-                <artifactId>sca-cloud-common</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -56,6 +64,31 @@
                 <version>${lombok.version}</version>
             </dependency>
 
+            <!--bootstrap配置文件  -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-context</artifactId>
+                <version>${spring-cloud-context.version}</version>
+            </dependency>
+
+            <!--    好像是cloud2022.0.2之后将这个移除了  所以需要单独导入        -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>${spring-cloud-starter-bootstrap.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-discovery -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                <version>${spring-cloud-starter-alibaba-nacos.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-config -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                <version>${spring-cloud-starter-alibaba-nacos.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>

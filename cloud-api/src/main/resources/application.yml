@@ -1,5 +1,22 @@
-server:
-  port: 80
-spring:
-  application:
-    name: api
+#server:
+#  port: 80
+#spring:
+#  application:
+#    name: api
+## springdoc-openapi项目配置
+##springdoc:
+##  swagger-ui:
+##    path: /swagger
+##    tags-sorter: alpha
+##    operations-sorter: alpha
+##  api-docs:
+##    path: /v3/api-docs
+##  group-configs:
+##    - group: 'default'
+##      paths-to-match: '/**'
+##      packages-to-scan: com.levy
+## knife4j的增强配置，不需要增强可以不配
+##knife4j:
+##  enable: true
+##  setting:
+##    language: zh-CN
