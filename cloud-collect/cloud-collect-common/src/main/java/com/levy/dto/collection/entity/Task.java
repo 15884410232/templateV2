@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.dtsw.collection.entity.base.BaseEntity;
-import com.dtsw.collection.enumeration.TaskStatus;
+
+import com.levy.dto.collection.entity.base.BaseEntity;
+import com.levy.dto.collection.enumeration.TaskStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

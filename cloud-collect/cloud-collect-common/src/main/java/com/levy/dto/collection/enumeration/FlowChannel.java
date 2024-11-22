@@ -3,7 +3,8 @@ package com.levy.dto.collection.enumeration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import static com.dtsw.collection.enumeration.Flow.*;
+import static com.levy.dto.collection.enumeration.Flow.*;
+
 
 /**
  * @author Wangwang Tang

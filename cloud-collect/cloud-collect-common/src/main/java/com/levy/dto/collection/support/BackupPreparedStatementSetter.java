@@ -1,11 +1,11 @@
 package com.levy.dto.collection.support;
 
-import com.dtsw.collection.enumeration.TaskChunkStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.levy.dto.collection.enumeration.TaskChunkStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.integration.jdbc.store.channel.ChannelMessageStorePreparedStatementSetter;
 import org.springframework.messaging.Message;
@@ -22,8 +22,9 @@ import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-import static com.dtsw.integration.handler.AbstractMessageHandler.PARENT_ID;
-import static com.dtsw.integration.handler.AbstractMessageHandler.PARENT_IDS;
+import static com.levy.dto.collection.constant.MessageHeaderConstants.PARENT_ID;
+import static com.levy.dto.collection.constant.MessageHeaderConstants.PARENT_IDS;
+
 
 /**
  * 对jdbc的查询语句注入参数

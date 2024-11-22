@@ -1,8 +1,9 @@
 package com.levy.dto.collection.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.dtsw.collection.entity.base.BaseEntity;
-import com.dtsw.collection.enumeration.SourceType;
+
+import com.levy.dto.collection.entity.base.BaseEntity;
+import com.levy.dto.collection.enumeration.SourceType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

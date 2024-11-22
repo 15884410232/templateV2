@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.dtsw.collection.enumeration.Language.*;
+import static com.levy.dto.collection.enumeration.Language.*;
+
 
 /**
  * 流程

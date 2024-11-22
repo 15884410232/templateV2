@@ -1,7 +1,8 @@
 package com.levy.dto.collection.vos;
 
-import com.dtsw.collection.enumeration.Flow;
-import com.dtsw.collection.enumeration.FlowParameterType;
+
+import com.levy.dto.collection.enumeration.Flow;
+import com.levy.dto.collection.enumeration.FlowParameterType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;

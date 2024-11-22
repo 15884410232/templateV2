@@ -2,9 +2,9 @@ package com.levy.dto.collection.enumeration;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import model.enums.HttpCodeEnum;
 
-import static com.dtsw.collection.enumeration.FlowParameterType.*;
+import static com.levy.dto.collection.enumeration.FlowParameterType.*;
+
 
 /**
  * 流程参数
@@ -59,6 +59,6 @@ public enum FlowParameter {
                 return parameter;
             }
         }
-        throw new RuntimeException(HttpCodeEnum.PARAM_INVALID.getErrorMessage());
+        throw new RuntimeException("");
     }
 }

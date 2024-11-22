@@ -1,7 +1,7 @@
 package com.levy.dto.collection.vos;
 
-import com.dtsw.collection.enumeration.TaskChunkStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.levy.dto.collection.enumeration.TaskChunkStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
