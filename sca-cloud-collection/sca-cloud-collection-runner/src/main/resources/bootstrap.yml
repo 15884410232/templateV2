@@ -1,0 +1,22 @@
+server:
+  port: 8231
+spring:
+  application:
+    name: sca-cloud-collection-runner
+  cloud:
+    nacos:
+      username: nacos
+      password: Y9mXRnmUr5e8Gk8
+      server-addr: 10.80.0.110:8848
+      config:
+        group: DEFAULT_GROUP
+        refresh-enabled: true
+        prefix: ${spring.application.name}
+        file-extension: yml
+        namespace: local
+      discovery:
+        group: ${spring.cloud.nacos.config.group}
+        namespace: local
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.${spring.cloud.nacos.config.file-extension}

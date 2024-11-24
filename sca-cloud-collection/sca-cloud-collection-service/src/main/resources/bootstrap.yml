@@ -1,0 +1,23 @@
+server:
+  port: 8232
+spring:
+  application:
+    name: sca-cloud-collection-service
+  cloud:
+    nacos:
+      username: nacos
+      password: Y9mXRnmUr5e8Gk8
+      config:
+        server-addr: 10.80.0.110:8848
+        group: DEFAULT_GROUP
+        refresh-enabled: true
+        prefix: ${spring.application.name}
+        file-extension: yml
+        namespace: local
+      discovery:
+        group: DEFAULT_GROUP
+        server-addr: 10.80.0.110:8848
+        namespace: local
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.${spring.cloud.nacos.config.file-extension}

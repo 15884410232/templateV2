@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dtsw.collection.mapper.OpenSourceSoftwareExtendMapper">
+
+
+    <select id="getAllByProgrammingLanguage" resultType="com.dtsw.collection.dto.PythonDownLoadDto">
+        select
+            t01.download_url,t02.name,t02.version
+        from sca_cloud_open_source_software_extend t01,
+        sca_cloud_open_source_software t02
+        where
+        t02.programming_language = #{programmingLanguage} and t01.id = t02.id
+        limit #{size} offset #{offset}
+    </select>
+</mapper>

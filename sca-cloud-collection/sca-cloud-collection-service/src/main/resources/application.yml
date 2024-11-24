@@ -1,0 +1,10 @@
+#spring:
+#  # 数据库配置
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    druid:
+#      # 数据库
+#      url: jdbc:postgresql://10.80.0.110:5432/sca_cloud
+#      username: postgres
+#      password: BM8nw7l9mmMG1ru
+#      driver-class-name: org.postgresql.Driver
