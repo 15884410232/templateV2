@@ -63,6 +63,7 @@ public class TaskStartup implements ApplicationContextAware {
                 task.setStartedAt(LocalDateTime.now());
                 taskMapper.updateById(task);
             } catch (Exception e) {
+                e.printStackTrace();
                 task.setStatus(TaskStatus.FAILED);
                 task.setReason(e.getMessage());
                 task.setStartedAt(LocalDateTime.now());

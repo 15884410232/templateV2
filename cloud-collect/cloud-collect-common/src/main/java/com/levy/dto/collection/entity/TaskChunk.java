@@ -20,7 +20,7 @@ import java.util.Map;
 @TableName(value = "sca_cloud_collection_task_chunk", autoResultMap = true)
 public class TaskChunk {
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     /** 任务ID */
