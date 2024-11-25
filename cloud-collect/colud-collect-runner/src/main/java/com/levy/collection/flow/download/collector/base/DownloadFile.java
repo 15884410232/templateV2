@@ -1,7 +1,7 @@
 package com.levy.collection.flow.download.collector.base;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
-import com.dtsw.collection.flow.dto.MinioSaveObject;
+import com.levy.collection.flow.dto.MinioSaveObject;
 
 import java.util.List;
 

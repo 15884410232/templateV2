@@ -1,15 +1,17 @@
 package com.levy.collection.flow.go.collector;
 
-import com.alibaba.fastjson.JSON;
-import com.dtsw.collection.enumeration.FlowChannel;
-import com.dtsw.collection.enumeration.FlowParameter;
-import com.dtsw.collection.flow.dto.go.ModuleInfo;
-import com.dtsw.collection.flow.go.entity.GoModule;
-import com.dtsw.collection.flow.go.mapper.GoModuleMaper;
-import com.dtsw.collection.flow.go.service.GoModuleService;
-import com.dtsw.collection.util.HttpUtils;
-import com.dtsw.integration.endpoint.MessageSplitter;
-import com.dtsw.util.MD5Encryptor;
+
+import com.alibaba.fastjson2.JSON;
+import com.levy.collection.flow.dto.go.ModuleInfo;
+import com.levy.collection.flow.go.entity.GoModule;
+import com.levy.collection.flow.go.mapper.GoModuleMaper;
+import com.levy.collection.flow.go.service.GoModuleService;
+import com.levy.collection.util.HttpUtils;
+import com.levy.dto.collection.constant.SourceTypeConstants;
+import com.levy.dto.collection.enumeration.FlowChannel;
+import com.levy.dto.collection.enumeration.FlowParameter;
+import com.levy.dto.integration.endpoint.MessageSplitter;
+import com.levy.dto.util.MD5Encryptor;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -76,52 +78,50 @@ public class $1ReadMoudleSplitter implements MessageSplitter<Object> {
 
     @Override
     public List<ModuleInfo> split(MessageHeaders headers) throws Exception {
-        List<ModuleInfo> moduleInfoList=new ArrayList<>();
         String moudleUrl = headers.get(FlowParameter.GO_COLLECTOR_MOUDLE_URL.getName(), String.class);
-        Assert.notNull(moudleUrl, "moudleUrl must not be null");
-        String since="2019-10-07T08:33:49.842297Z";
-        boolean getByNet=true;
-        while(getByNet){
-            try {
-                String url=moudleUrl+"?since="+since;
-                log.info(url);
-                byte[] bytes = HttpUtils.get(url, HttpResponse.BodyHandlers.ofByteArray());
-                List<ModuleInfo> list=new ArrayList<>(pageSize);
-                try(BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)))){
-                    list=bufferedReader.lines().map(item-> JSON.parseObject(item, ModuleInfo.class)).collect(Collectors.toList());
-                }
-                List<GoModule> goModules=new ArrayList<>(pageSize);
-                list.stream().forEach(item ->{
-                    GoModule goModule=new GoModule();
-                    goModule.setId(generateId(item.getPath(),item.getVersion()));
-                    goModule.setName(item.getPath());
-                    goModule.setVersion(item.getVersion());
-                    goModule.setRelease_time(item.getTimestamp().toLocalDateTime());
-                    goModules.add(goModule);
-                });
-                goModuleService.saveOrUpdateBatch(goModules);
-                if(list.size()<pageSize){
+        String dataSourceType=headers.get(FlowParameter.GO_COLLECTOR_MOUDLE_SOURCE_TYPE.getName(), String.class);
+        dataSourceType="net";
+        if(SourceTypeConstants.net.equals(dataSourceType)) {
+            log.info("read module from net");
+            Assert.notNull(moudleUrl, "moudleUrl must not be null");
+            String since = "2020-03-20T05:41:55.309Z";
+            boolean getByNet = true;
+            while (getByNet) {
+                try {
+                    String url = moudleUrl + "?since=" + since;
+                    log.info(url);
+                    byte[] bytes = HttpUtils.get(url, HttpResponse.BodyHandlers.ofByteArray());
+                    List<ModuleInfo> list;
+                    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)))) {
+                        list = bufferedReader.lines().map(item -> JSON.parseObject(item, ModuleInfo.class)).collect(Collectors.toList());
+                    }
+                    log.info(String.valueOf(list.size()));
+                    List<GoModule> goModules = new ArrayList<>(pageSize);
+                    list.stream().forEach(item -> {
+                        GoModule goModule = new GoModule();
+                        goModule.setId(generateId(item.getPath(), item.getVersion()));
+                        goModule.setName(item.getPath());
+                        goModule.setVersion(item.getVersion());
+                        goModule.setRelease_time(item.getTimestamp().toLocalDateTime());
+                        goModules.add(goModule);
+                    });
+                    if (!goModules.isEmpty()) {
+                        goModuleService.saveOrUpdateBatch(goModules);
+                    }
+                    if (list.size() < pageSize) {
+                        break;
+                    }
+                    since = list.get(list.size() - 1).getTimestamp().toString();
+                } catch (Exception ex) {
+                    log.error("read moudle error", ex);
                     break;
                 }
-                since=list.get(list.size()-1).getTimestamp().toString();
-            }catch (Exception ex){
-                log.error("read moudle error",ex);
-                break;
             }
+        }else{
+            log.info("read moudle from local");
         }
         log.info("end");
-//        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(new FileInputStream(moudleUrl)));
-//        List<ModuleInfo> list=bufferedReader.lines().map(item-> JSON.parseObject(item, ModuleInfo.class)).collect(Collectors.toList());
-//        List<GoModule> goModules=new ArrayList<>(2000);
-//        list.stream().forEach(item ->{
-//            GoModule goModule=new GoModule();
-//            goModule.setId(item.getPath());
-//            goModule.setName(item.getPath());
-//            goModule.setVersion(item.getVersion());
-//            goModule.setRelease_time(item.getTimestamp().toLocalDateTime());
-//            goModules.add(goModule);
-//        });
-//        goModuleService.saveOrUpdateBatch(goModules);
+
         return null;
 
     }

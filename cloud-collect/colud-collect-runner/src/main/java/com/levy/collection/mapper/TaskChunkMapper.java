@@ -1,7 +1,7 @@
 package com.levy.collection.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.dtsw.collection.entity.TaskChunk;
+import com.levy.dto.collection.entity.TaskChunk;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

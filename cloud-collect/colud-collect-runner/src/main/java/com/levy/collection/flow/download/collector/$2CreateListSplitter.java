@@ -3,11 +3,11 @@ package com.levy.collection.flow.download.collector;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
-import com.dtsw.collection.constant.MessageHeaderConstants;
-import com.dtsw.collection.enumeration.FlowChannel;
-import com.dtsw.collection.flow.download.collector.base.DownloadFile;
-import com.dtsw.collection.flow.dto.MinioSaveObject;
-import com.dtsw.integration.endpoint.MessageSplitter;
+import com.levy.collection.flow.download.collector.base.DownloadFile;
+import com.levy.collection.flow.dto.MinioSaveObject;
+import com.levy.dto.collection.constant.MessageHeaderConstants;
+import com.levy.dto.collection.enumeration.FlowChannel;
+import com.levy.dto.integration.endpoint.MessageSplitter;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

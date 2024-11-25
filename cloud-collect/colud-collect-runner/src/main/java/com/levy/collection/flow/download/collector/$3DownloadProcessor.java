@@ -2,12 +2,12 @@ package com.levy.collection.flow.download.collector;
 
 
 import cn.hutool.core.lang.Assert;
-import com.alibaba.fastjson.JSON;
-import com.dtsw.collection.constant.MessageHeaderConstants;
-import com.dtsw.collection.enumeration.FlowChannel;
-import com.dtsw.collection.flow.download.collector.base.DownloadFile;
-import com.dtsw.collection.flow.dto.MinioSaveObject;
-import com.dtsw.integration.endpoint.MessageProcessor;
+import com.alibaba.fastjson2.JSON;
+import com.levy.collection.flow.download.collector.base.DownloadFile;
+import com.levy.collection.flow.dto.MinioSaveObject;
+import com.levy.dto.collection.constant.MessageHeaderConstants;
+import com.levy.dto.collection.enumeration.FlowChannel;
+import com.levy.dto.integration.endpoint.MessageProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

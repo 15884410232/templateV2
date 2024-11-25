@@ -1,6 +1,6 @@
 package com.levy.collection.util;
 
-import com.dtsw.collection.enumeration.FlowParameter;
+import com.levy.dto.collection.enumeration.FlowParameter;
 import org.springframework.messaging.MessageHeaders;
 
 /**

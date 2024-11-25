@@ -17,4 +17,12 @@ public interface MessageHeaderConstants {
     String SOURCE_GATEWAY = "sourceGateway";
 
     String ROUTE_CHANNEL = "routeChannel";
+
+    String LANGUAGE = "language";
+
+    String PAGESIZE="pageSize";
+
+    String DOWNLOAD="Download";
+
+    String BEAN_NAME="beanName";
 }

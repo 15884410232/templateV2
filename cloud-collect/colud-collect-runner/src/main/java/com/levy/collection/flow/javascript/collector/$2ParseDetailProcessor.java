@@ -1,18 +1,20 @@
 package com.levy.collection.flow.javascript.collector;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.dtsw.collection.dto.js.NpmPackage;
-import com.dtsw.collection.entity.OpenSourceSoftware;
-import com.dtsw.collection.enumeration.FlowChannel;
-import com.dtsw.collection.enumeration.FlowParameter;
-import com.dtsw.collection.enumeration.Language;
-import com.dtsw.collection.service.mybatis.OpenSourceSoftwareExtendService;
-import com.dtsw.collection.service.mybatis.OpenSourceSoftwareService;
-import com.dtsw.integration.endpoint.MessageProcessor;
-import com.dtsw.util.MD5Encryptor;
+import com.levy.collection.flow.download.collector.base.StringChannelInboundHandler;
+import com.levy.collection.service.mybatis.OpenSourceSoftwareExtendService;
+import com.levy.collection.service.mybatis.OpenSourceSoftwareService;
+import com.levy.dto.collection.dto.js.NpmPackage;
+import com.levy.dto.collection.entity.OpenSourceSoftware;
+import com.levy.dto.collection.enumeration.FlowChannel;
+import com.levy.dto.collection.enumeration.FlowParameter;
+import com.levy.dto.collection.enumeration.Language;
+import com.levy.dto.integration.endpoint.MessageProcessor;
+import com.levy.dto.util.MD5Encryptor;
+import com.levy.dto.util.netty.NettyClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +48,8 @@ public class $2ParseDetailProcessor implements MessageProcessor<String> {
 
     private final OpenSourceSoftwareExtendService openSourceSoftwareExtendService;
 
+    private final StringChannelInboundHandler stringChannelInboundHandler;
+
     @Override
     public String from() {
         return FlowChannel.JAVASCRIPT_COLLECTOR_PARSE_DETAIL.getChannel();
@@ -57,19 +62,18 @@ public class $2ParseDetailProcessor implements MessageProcessor<String> {
 
     @Override
     public Object process(String project, MessageHeaders headers){
-        //生成1000内的随机数
-        int randomNumber = (int) (Math.random() * 1000);
-        if(randomNumber==1) {
-            log.info("JS采集:{}", project);
-        }
+        log(project);
+        String detailUrl = headers.get(FlowParameter.JS_COLLECTOR_DETAIL_URL.getName(), String.class);
+        Assert.notNull(detailUrl, "jsonUrl must not be null");
         try {
-            String detailUrl = headers.get(FlowParameter.JS_COLLECTOR_DETAIL_URL.getName(), String.class);
-            Assert.notNull(detailUrl, "jsonUrl must not be null");
             URI url = UriComponentsBuilder.fromUriString(detailUrl).pathSegment(project).encode().build().toUri();
-            JSONObject resJson = restTemplate.getForObject(url, JSONObject.class);
-            saveEntity(resJson);
+            NettyClient.newBuilder().setUrl(url.toString()).setSimpleChannelInboundHandler(stringChannelInboundHandler).buildBootstrap().connectAndSend();
+//            JSONObject resJson = restTemplate.getForObject(url, JSONObject.class);
+//            saveEntity(resJson);
             return null;
-        }catch (Exception e){
+        }catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }catch (RuntimeException e){
             log.info("JS采集失败:{}",project);
             e.printStackTrace();
             return null;
@@ -192,5 +196,13 @@ public class $2ParseDetailProcessor implements MessageProcessor<String> {
         // 使用正则表达式匹配无效的 UTF-8 字符
         Pattern invalidUtf8Pattern = Pattern.compile("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]");
         return invalidUtf8Pattern.matcher(input).replaceAll("");
+    }
+
+    public void log(String project){
+        //生成1000内的随机数
+        int randomNumber = (int) (Math.random() * 1000);
+        if(randomNumber==1) {
+            log.info("JS采集:{}", project);
+        }
     }
 }

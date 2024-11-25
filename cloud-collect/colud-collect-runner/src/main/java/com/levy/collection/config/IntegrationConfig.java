@@ -1,14 +1,15 @@
 package com.levy.collection.config;
 
-import com.dtsw.collection.config.support.TaskChunkStatusInterceptor;
-import com.dtsw.collection.mapper.TaskChunkMapper;
-import com.dtsw.collection.support.BackupMessageStoreQueryProvider;
-import com.dtsw.collection.support.BackupPreparedStatementSetter;
-import com.dtsw.integration.annotation.IntegrationConfigurer;
-import com.dtsw.integration.store.RedisChannelPriorityBackupMessageStore;
-import com.dtsw.integration.support.MessageChannelRegistrar;
-import com.dtsw.integration.support.MessageHandlerRegistrar;
-import com.dtsw.integration.support.MessageInterceptorRegistry;
+
+import com.levy.collection.config.support.TaskChunkStatusInterceptor;
+import com.levy.collection.mapper.TaskChunkMapper;
+import com.levy.dto.collection.support.BackupMessageStoreQueryProvider;
+import com.levy.dto.collection.support.BackupPreparedStatementSetter;
+import com.levy.dto.integration.annotation.IntegrationConfigurer;
+import com.levy.dto.integration.store.RedisChannelPriorityBackupMessageStore;
+import com.levy.dto.integration.support.MessageChannelRegistrar;
+import com.levy.dto.integration.support.MessageHandlerRegistrar;
+import com.levy.dto.integration.support.MessageInterceptorRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

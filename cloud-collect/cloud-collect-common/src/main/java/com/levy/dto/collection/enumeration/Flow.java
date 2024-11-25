@@ -23,6 +23,8 @@ public enum Flow implements IEnum<String> {
     JS_RESOLVER(JAVA_SCRIPT, "解析程序（支持Excel）"),
     PYTHON_COLLECTOR(PYTHON, "采集程序"),
     JAVASCRIPT_COLLECTOR(JAVA_SCRIPT, "采集程序"),
+    DOWNLOAD_RESOVLE(ALL, "下载程序"),
+    GO_COLLECTOR(Go, "采集程序"),
     ;
 
     /** 所属语言 */

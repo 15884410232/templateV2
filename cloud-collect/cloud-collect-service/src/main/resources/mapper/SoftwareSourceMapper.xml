@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.levy.collect.mapper.SoftwareSourceMapper">
+
+<!--    <resultMap id="BaseResultMap" type="com.dtsw.collection.entity.Source">-->
+<!--        <id property="id" column="id" jdbcType="VARCHAR"/>-->
+<!--        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>-->
+<!--        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>-->
+<!--        <result property="name" column="name" jdbcType="VARCHAR" />-->
+<!--        <result property="type" column="type" jdbcType="VARCHAR"/>-->
+<!--        <result property="gateway" column="gateway" jdbcType="VARCHAR"/>-->
+<!--        <result property="priority" column="priority" jdbcType="VARCHAR"/>-->
+<!--        <result property="cron" column="cron" jdbcType="VARCHAR"/>-->
+<!--        <result property="remove" column="remove" jdbcType="BOOLEAN"/>-->
+
+
+<!--    </resultMap>-->
+
+    <sql id="Base_Column_List">
+        id,create_time,update_time,
+        name,type, gateway,priority,
+        cron,remove
+    </sql>
+
+
+<!--    <select id="getAll" resultMap="BaseResultMap">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List"/>-->
+<!--        from sca_cloud_software_source-->
+<!--    </select>-->
+
+
+<!--    <select id="getAllById" resultMap="BaseResultMap">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List"/>-->
+<!--        from software_source-->
+<!--        where-->
+<!--        id = #{id}-->
+<!--    </select>-->
+    <select id="getByIdAndNotRemove" resultType="com.levy.dto.collection.entity.Source">
+        select
+        <include refid="Base_Column_List"/>
+        from sca_cloud_collection_source
+        where
+        id = #{id}
+        AND remove = 'FALSE'
+    </select>
+</mapper>

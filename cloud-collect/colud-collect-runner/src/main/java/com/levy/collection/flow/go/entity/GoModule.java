@@ -1,7 +1,7 @@
 package com.levy.collection.flow.go.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.dtsw.collection.entity.base.BaseEntity;
+import com.levy.dto.collection.entity.base.BaseEntity;
 import lombok.Data;
 
 import java.time.LocalDateTime;

@@ -1,22 +1,62 @@
-#server:
-#  port: 80
-#spring:
-#  application:
-#    name: api
-## springdoc-openapi项目配置
-##springdoc:
-##  swagger-ui:
-##    path: /swagger
-##    tags-sorter: alpha
-##    operations-sorter: alpha
-##  api-docs:
-##    path: /v3/api-docs
-##  group-configs:
-##    - group: 'default'
-##      paths-to-match: '/**'
-##      packages-to-scan: com.levy
-## knife4j的增强配置，不需要增强可以不配
-##knife4j:
-##  enable: true
-##  setting:
-##    language: zh-CN
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+  datasource:
+    url: jdbc:mysql://162.14.117.12:3306/sca_cloud?useSSL=false&serverTimezone=UTC
+    username: root
+    password: Wochenqi!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  druid:
+    initial-size: 5
+    min-idle: 5
+    max-active: 20
+    max-wait: 60000
+    time-between-eviction-runs-millis: 60000
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 1 FROM DUAL
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    pool-prepared-statements: true
+    max-pool-prepared-statement-per-connection-size: 20
+    filters: stat,wall,log4j
+    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 输出 MyBatis 日志
+  mapper-locations: classpath:mapper/*.xml # 映射文件位置
+  type-aliases-package: com.yourpackage.entity # 实体类包路径
+  global-config:
+    db-config:
+      id-type: auto # 主键生成策略
+      table-underline-to-camel: true # 表名和字段名下划线转驼峰
+  # injection:
+  #   mapper: com.yourpackage.mapper # 自定义通用 Mapper 接口
+test:
+  test: te
+# springdoc-openapi项目配置
+#springdoc:
+#  swagger-ui:
+#    path: /swagger
+#    tags-sorter: alpha
+#    operations-sorter: alpha
+#  api-docs:
+#    path: /v3/api-docs
+#  group-configs:
+#    - group: 'default'
+#      paths-to-match: '/**'
+#      packages-to-scan: com.levy
+# knife4j的增强配置，不需要增强可以不配
+#knife4j:
+#  enable: true
+#  setting:
+#    language: zh-CN

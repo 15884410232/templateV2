@@ -23,6 +23,7 @@ public enum FlowParameterType {
     DATE(LocalDate.class),
     TIME(LocalTime.class),
     DATE_TIME(LocalDateTime.class),
+    ENUM(Enum.class)
     ;
 
     private final Class<?> type;

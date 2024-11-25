@@ -1,10 +1,10 @@
 package com.levy.collection.flow.download.collector;
 
 import cn.hutool.core.lang.Assert;
-import com.dtsw.collection.constant.MessageHeaderConstants;
-import com.dtsw.collection.enumeration.FlowChannel;
-import com.dtsw.collection.flow.download.collector.base.DownloadFile;
-import com.dtsw.integration.endpoint.MessageSplitter;
+import com.levy.collection.flow.download.collector.base.DownloadFile;
+import com.levy.dto.collection.constant.MessageHeaderConstants;
+import com.levy.dto.collection.enumeration.FlowChannel;
+import com.levy.dto.integration.endpoint.MessageSplitter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class $1PageSplitter implements MessageSplitter<Object> , ApplicationContextAware {
+public class $1PageSplitter implements MessageSplitter<Object>, ApplicationContextAware {
 
     ApplicationContext applicationContext;
 

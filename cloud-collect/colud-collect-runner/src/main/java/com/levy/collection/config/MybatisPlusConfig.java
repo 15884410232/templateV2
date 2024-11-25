@@ -20,7 +20,7 @@ import java.util.Collections;
 
 @EnableTransactionManagement
 @Configuration
-@MapperScan("com.dtsw.**.mapper")
+@MapperScan("com.levy.**.mapper")
 public class MybatisPlusConfig {
 
     @Bean

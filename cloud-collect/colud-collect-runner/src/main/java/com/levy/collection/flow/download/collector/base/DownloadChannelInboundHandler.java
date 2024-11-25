@@ -1,8 +1,7 @@
 package com.levy.collection.flow.download.collector.base;
 
-import com.dtsw.collection.flow.download.collector.provider.PythonDownloadProvider;
-import com.dtsw.collection.flow.dto.MinioSaveObject;
-import com.dtsw.collection.service.store.Storage;
+
+import com.levy.collection.flow.dto.MinioSaveObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -11,11 +10,13 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.CharsetUtil;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -27,24 +28,26 @@ public class DownloadChannelInboundHandler extends SimpleChannelInboundHandler<H
 
     ThreadLocal<MinioSaveObject> minioSaveObjectThreadLocal = new ThreadLocal<>();
 
-    @Resource
-    private Storage storage;
+//    @Resource
+//    private Storage storage;
 
     private Charset charset = CharsetUtil.UTF_8;
 
-    private DownloadChannelInboundHandler() {
-
-    }
-
-    public static DownloadChannelInboundHandler getInstance() {
-        if (downloadChannelInboundHandler == null) {
-            synchronized (DownloadChannelInboundHandler.class) {
-                downloadChannelInboundHandler = new DownloadChannelInboundHandler();
-            }
-        }
-        return downloadChannelInboundHandler;
-
-    }
+//    private DownloadChannelInboundHandler() {
+//
+//    }
+//
+//    public static DownloadChannelInboundHandler getInstance() {
+//        if (downloadChannelInboundHandler == null) {
+//            synchronized (DownloadChannelInboundHandler.class) {
+//                if (downloadChannelInboundHandler == null) {
+//                    downloadChannelInboundHandler = new DownloadChannelInboundHandler();
+//                }
+//            }
+//        }
+//        return downloadChannelInboundHandler;
+//
+//    }
 
 
     @Override
@@ -56,12 +59,19 @@ public class DownloadChannelInboundHandler extends SimpleChannelInboundHandler<H
         if (msg instanceof HttpContent) {
             HttpContent content = (HttpContent) msg;
             ByteBuf buf = content.content();
-            MinioSaveObject minioSaveObject = minioSaveObjectThreadLocal.get();
-            try (InputStream inputStream = convertByteBufToInputStream(buf);
-                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
-                storage.putObject(PythonDownloadProvider.bucketName, minioSaveObject.getObjectName(), bufferedInputStream);
-            } catch (Exception e) {
-                e.printStackTrace();
+            try {
+                //获取当前线程的名称
+                System.out.println("当前线程名称：" + Thread.currentThread().getName());
+                //将buf保存为文件到本地文件夹中
+
+                FileOutputStream fileOutputStream = new FileOutputStream("D:\\tahrir-api-0.2.7.tar.gz");
+                InputStream inputStream = convertByteBufToInputStream(buf);
+//                saveByteBufToFile(buf, "D:\\tahrir-api-0.2.7.tar.gz");
+                fileOutputStream.write(inputStream.readAllBytes());
+                fileOutputStream.close();
+                inputStream.close();
+            } finally {
+//                                            buf.release();
             }
             if (content instanceof LastHttpContent) {
                 ctx.close();

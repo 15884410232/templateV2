@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.levy.collect.mapper.TaskMapper">
+
+<!--    <resultMap id="BaseResultMap" type="com.dtsw.collection.entity.Task">-->
+<!--        <id property="id" column="id" jdbcType="VARCHAR"/>-->
+<!--        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>-->
+<!--        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>-->
+<!--        <result property="completedAt" column="completed_at" jdbcType="TIMESTAMP" />-->
+<!--        <result property="failedCount" column="failed_count" jdbcType="INTEGER"/>-->
+<!--        <result property="name" column="name" jdbcType="VARCHAR"/>-->
+<!--        <result property="params" column="params" jdbcType="VARCHAR"/>-->
+<!--        <result property="reason" column="reason" jdbcType="VARCHAR"/>-->
+<!--        <result property="sourceId" column="source_id" jdbcType="VARCHAR"/>-->
+<!--        <result property="startedAt" column="started_at" jdbcType="TIMESTAMP"/>-->
+<!--        <result property="status" column="status" jdbcType="VARCHAR"/>-->
+<!--        <result property="successCount" column="success_count" jdbcType="INTEGER"/>-->
+<!--        <result property="totalCount" column="total_count" jdbcType="INTEGER"/>-->
+<!--    </resultMap>-->
+
+
+<!--    <sql id="Base_Column_List">-->
+<!--        id,create_time,update_time,-->
+<!--        completed_at,failed_count,name,-->
+<!--        params,reason,source_id,-->
+<!--        started_at,status,success_count,total_count-->
+<!--    </sql>-->
+<!--    <select id="getAllByStatus" resultMap="BaseResultMap">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List"/>-->
+<!--        from sca_cloud_task-->
+<!--        <where>-->
+<!--            <if test="status!=null and status!=''">-->
+<!--                status = #{status}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+        <sql id="Base_Column_List">
+            id,create_time,update_time,
+            completed_at,failed_count,name,
+            params,reason,source_id,
+            started_at,status,success_count,total_count
+        </sql>
+    <select id="getAllByStatus" >
+        select
+        <include refid="Base_Column_List"/>
+        from sca_cloud_collection_task
+        where
+        status = #{status}
+    </select>
+</mapper>

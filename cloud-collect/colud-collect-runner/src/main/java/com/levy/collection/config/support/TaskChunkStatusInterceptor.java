@@ -1,10 +1,10 @@
 package com.levy.collection.config.support;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.dtsw.collection.entity.TaskChunk;
-import com.dtsw.collection.enumeration.TaskChunkStatus;
-import com.dtsw.collection.mapper.TaskChunkMapper;
-import com.dtsw.integration.annotation.MessageInterceptor;
+import com.levy.collection.mapper.TaskChunkMapper;
+import com.levy.dto.collection.entity.TaskChunk;
+import com.levy.dto.collection.enumeration.TaskChunkStatus;
+import com.levy.dto.integration.annotation.MessageInterceptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;

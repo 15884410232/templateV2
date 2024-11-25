@@ -13,12 +13,14 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Language implements IEnum<String> {
+    ALL("All","All"),
     JAVA("Java", "Java"),
     C("C", "C"),
     C_PLUS_PLUS("C++", "C++"),
     C_SHARP("C#", "C#"),
     JAVA_SCRIPT("JavaScript", "JavaScript"),
     PYTHON("Python", "Python"),
+    Go("Go", "Go"),
     ;
 
     /** 唯一标识 */

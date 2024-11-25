@@ -1,8 +1,9 @@
 package com.levy.collection.flow.python.collector;
 
-import com.dtsw.collection.enumeration.FlowChannel;
-import com.dtsw.collection.enumeration.FlowParameter;
-import com.dtsw.integration.endpoint.MessageSplitter;
+
+import com.levy.dto.collection.enumeration.FlowChannel;
+import com.levy.dto.collection.enumeration.FlowParameter;
+import com.levy.dto.integration.endpoint.MessageSplitter;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

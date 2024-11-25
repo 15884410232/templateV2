@@ -1,8 +1,8 @@
 package com.levy.collection.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.dtsw.collection.dto.PythonDownLoadDto;
-import com.dtsw.collection.entity.OpenSourceSoftwareExtend;
+import com.levy.dto.collection.dto.PythonDownLoadDto;
+import com.levy.dto.collection.entity.OpenSourceSoftwareExtend;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

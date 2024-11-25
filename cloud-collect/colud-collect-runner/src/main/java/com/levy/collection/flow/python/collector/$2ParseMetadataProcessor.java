@@ -2,16 +2,16 @@ package com.levy.collection.flow.python.collector;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.dtsw.collection.dto.Metadata;
-import com.dtsw.collection.entity.OpenSourceSoftware;
-import com.dtsw.collection.entity.OpenSourceSoftwareExtend;
-import com.dtsw.collection.enumeration.FlowChannel;
-import com.dtsw.collection.enumeration.FlowParameter;
-import com.dtsw.collection.enumeration.Language;
-import com.dtsw.collection.service.mybatis.OpenSourceSoftwareExtendService;
-import com.dtsw.collection.service.mybatis.OpenSourceSoftwareService;
-import com.dtsw.integration.endpoint.MessageProcessor;
-import com.dtsw.util.MD5Encryptor;
+import com.levy.collection.service.mybatis.OpenSourceSoftwareExtendService;
+import com.levy.collection.service.mybatis.OpenSourceSoftwareService;
+import com.levy.dto.collection.dto.Metadata;
+import com.levy.dto.collection.entity.OpenSourceSoftware;
+import com.levy.dto.collection.entity.OpenSourceSoftwareExtend;
+import com.levy.dto.collection.enumeration.FlowChannel;
+import com.levy.dto.collection.enumeration.FlowParameter;
+import com.levy.dto.collection.enumeration.Language;
+import com.levy.dto.integration.endpoint.MessageProcessor;
+import com.levy.dto.util.MD5Encryptor;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

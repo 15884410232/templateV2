@@ -25,6 +25,13 @@ public enum FlowChannel {
 
     JAVASCRIPT_COLLECTOR_GATEWAY(JAVASCRIPT_COLLECTOR, "js.collect:gateway"),
     JAVASCRIPT_COLLECTOR_PARSE_DETAIL(JAVASCRIPT_COLLECTOR, "js.collect:parseMetadata"),
+
+    DOWNLOAD_GATEWAY(DOWNLOAD_RESOVLE, "download:gateway"),
+    DOWNLOAD_PAGE_SPLITTER(DOWNLOAD_RESOVLE, "download:page"),
+    DOWNLOAD_FILE(DOWNLOAD_RESOVLE, "download:file"),
+
+    GO_GATEWAY(GO_COLLECTOR, "go.collect:gateway"),
+    GO_READ_DETAIL(GO_COLLECTOR, "go.collect:readDtail"),
     ;
 
     /** 模型 */
@@ -38,5 +45,6 @@ public enum FlowChannel {
         JAVA_COLLECTOR.gateway = FlowChannel.JAVA_COLLECTOR_GATEWAY;
         PYTHON_COLLECTOR.gateway=FlowChannel.PYTHON_COLLECTOR_GATEWAY;
         JAVASCRIPT_COLLECTOR.gateway=FlowChannel.JAVASCRIPT_COLLECTOR_GATEWAY;
+        DOWNLOAD_RESOVLE.gateway=FlowChannel.DOWNLOAD_GATEWAY;
     }
 }
