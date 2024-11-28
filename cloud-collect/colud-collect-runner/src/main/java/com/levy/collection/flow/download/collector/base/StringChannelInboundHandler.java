@@ -5,14 +5,15 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.levy.collection.service.mybatis.OpenSourceSoftwareService;
-//import com.levy.collection.service.store.Storage;
 import com.levy.dto.collection.dto.js.NpmPackage;
 import com.levy.dto.collection.entity.OpenSourceSoftware;
 import com.levy.dto.collection.enumeration.Language;
 import com.levy.dto.util.MD5Encryptor;
+import com.levy.dto.util.netty.BasePayload;
+import com.levy.dto.util.netty.BaseSimpleChannelInboundHandler;
+import com.levy.dto.utils.IdUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
@@ -36,7 +37,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Component
-public class StringChannelInboundHandler extends SimpleChannelInboundHandler<HttpObject> {
+public class StringChannelInboundHandler extends BaseSimpleChannelInboundHandler {
 
     @Resource
     private OpenSourceSoftwareService openSourceSoftwareService;
@@ -107,7 +108,7 @@ public class StringChannelInboundHandler extends SimpleChannelInboundHandler<Htt
 //            List<OpenSourceSoftwareExtend> extendList = new ArrayList<>();
         npmPackage.getVersions().forEach((version, versionInfo) -> {
             OpenSourceSoftware software = new OpenSourceSoftware();
-            software.setId(generateId(versionInfo.getName(), version));
+            software.setId(IdUtils.generateId(versionInfo.getName(), version));
             software.setName(versionInfo.getName());
             software.setVersion(version);
             if(StringUtils.isNotBlank(versionInfo.getDescription())) {
@@ -182,4 +183,8 @@ public class StringChannelInboundHandler extends SimpleChannelInboundHandler<Htt
         return invalidUtf8Pattern.matcher(input).replaceAll("");
     }
 
+    @Override
+    public ThreadLocal<BasePayload> getThreadLocal() {
+        return null;
+    }
 }

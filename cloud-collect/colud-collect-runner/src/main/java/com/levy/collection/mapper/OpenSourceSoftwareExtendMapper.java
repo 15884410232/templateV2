@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface OpenSourceSoftwareExtendMapper extends BaseMapper<OpenSourceSoftwareExtend> {
 
-     List<PythonDownLoadDto> getAllByProgrammingLanguage(@Param("programmingLanguage") String programmingLanguage, long size, long offset);
+     List<PythonDownLoadDto> getAllByProgrammingLanguage(@Param("programmingLanguage") String programmingLanguage, @Param("size") long size, @Param("offset") long offset);
 }

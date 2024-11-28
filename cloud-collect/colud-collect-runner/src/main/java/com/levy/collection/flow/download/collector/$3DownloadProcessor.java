@@ -2,9 +2,8 @@ package com.levy.collection.flow.download.collector;
 
 
 import cn.hutool.core.lang.Assert;
-import com.alibaba.fastjson2.JSON;
 import com.levy.collection.flow.download.collector.base.DownloadFile;
-import com.levy.collection.flow.dto.MinioSaveObject;
+import com.levy.collection.flow.download.collector.payload.MinioSaveObject;
 import com.levy.dto.collection.constant.MessageHeaderConstants;
 import com.levy.dto.collection.enumeration.FlowChannel;
 import com.levy.dto.integration.endpoint.MessageProcessor;
@@ -32,7 +31,7 @@ public class $3DownloadProcessor implements MessageProcessor<MinioSaveObject>, A
     }
     @Override
     public String from() {
-        return FlowChannel.DOWNLOAD_FILE.getChannel()+"da";
+        return FlowChannel.DOWNLOAD_FILE.getChannel();
     }
     @Override
     public Integer concurrency() {
@@ -40,7 +39,7 @@ public class $3DownloadProcessor implements MessageProcessor<MinioSaveObject>, A
     }
     @Override
     public Object process(MinioSaveObject minioSaveObject, MessageHeaders headers) throws Exception {
-        log.info("开始下载：{}", JSON.toJSONString(minioSaveObject));
+//        log.info("开始下载：{}", JSON.toJSONString(minioSaveObject));
         if(StringUtils.isBlank(minioSaveObject.getDownloadUrl())){
             return null;
         }

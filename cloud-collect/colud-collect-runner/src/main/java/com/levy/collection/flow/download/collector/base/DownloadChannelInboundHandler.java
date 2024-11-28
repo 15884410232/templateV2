@@ -1,10 +1,12 @@
 package com.levy.collection.flow.download.collector.base;
 
 
-import com.levy.collection.flow.dto.MinioSaveObject;
+import com.levy.collection.flow.download.collector.payload.MinioSaveObject;
+import com.levy.dto.util.netty.BasePayload;
+import com.levy.dto.util.netty.BaseSimpleChannelInboundHandler;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
@@ -22,63 +24,72 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
 @Slf4j
+@ChannelHandler.Sharable
 @Component
-public class DownloadChannelInboundHandler extends SimpleChannelInboundHandler<HttpObject> {
+public class DownloadChannelInboundHandler extends BaseSimpleChannelInboundHandler {
     private volatile static DownloadChannelInboundHandler downloadChannelInboundHandler;
 
-    ThreadLocal<MinioSaveObject> minioSaveObjectThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<BasePayload> minioSaveObjectThreadLocal = new ThreadLocal<>();
 
 //    @Resource
 //    private Storage storage;
 
     private Charset charset = CharsetUtil.UTF_8;
 
-//    private DownloadChannelInboundHandler() {
-//
-//    }
-//
-//    public static DownloadChannelInboundHandler getInstance() {
-//        if (downloadChannelInboundHandler == null) {
-//            synchronized (DownloadChannelInboundHandler.class) {
-//                if (downloadChannelInboundHandler == null) {
-//                    downloadChannelInboundHandler = new DownloadChannelInboundHandler();
-//                }
-//            }
-//        }
-//        return downloadChannelInboundHandler;
-//
-//    }
-
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
         if (msg instanceof HttpResponse) {
-            HttpResponse response = (HttpResponse) msg;
-            log.info("STATUS: " + response.status());
+                HttpResponse response = (HttpResponse) msg;
+                if (response.status().code()!=200) {
+                    log.error("Non-200 status code received: " + response.status().code());
+                    ctx.close();
+                    return;
+                }
         }
-        if (msg instanceof HttpContent) {
-            HttpContent content = (HttpContent) msg;
-            ByteBuf buf = content.content();
-            try {
-                //获取当前线程的名称
-                System.out.println("当前线程名称：" + Thread.currentThread().getName());
-                //将buf保存为文件到本地文件夹中
-
-                FileOutputStream fileOutputStream = new FileOutputStream("D:\\tahrir-api-0.2.7.tar.gz");
-                InputStream inputStream = convertByteBufToInputStream(buf);
+            if (msg instanceof HttpContent) {
+                HttpContent content = (HttpContent) msg;
+                ByteBuf buf = content.content();
+                try {
+                    //将buf保存为文件到本地文件夹中
+                    MinioSaveObject minioSaveObject = (MinioSaveObject) DownloadChannelInboundHandler.minioSaveObjectThreadLocal.get();
+                    if (minioSaveObject == null) {
+                        ctx.close();
+                        return;
+                    }
+                    String downloadUrl = minioSaveObject.getDownloadUrl();
+                    //截取文件名
+                    String fileName = downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1);
+                    FileOutputStream fileOutputStream = new FileOutputStream("D:\\pythonSourcePackage\\" + fileName);
+                    InputStream inputStream = convertByteBufToInputStream(buf);
 //                saveByteBufToFile(buf, "D:\\tahrir-api-0.2.7.tar.gz");
-                fileOutputStream.write(inputStream.readAllBytes());
-                fileOutputStream.close();
-                inputStream.close();
-            } finally {
-//                                            buf.release();
+                    fileOutputStream.write(inputStream.readAllBytes());
+                    fileOutputStream.close();
+                    inputStream.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                if (content instanceof LastHttpContent) {
+                    ctx.close();
+                }
             }
-            if (content instanceof LastHttpContent) {
-                ctx.close();
-            }
-        }
     }
 
+
+
+    public static InputStream convertByteBufToInputStream(ByteBuf byteBuf) {
+        // 获取 ByteBuf 的可读字节数
+        int readableBytes = byteBuf.readableBytes();
+
+        // 创建一个新的字节数组
+        byte[] bytes = new byte[readableBytes];
+
+        // 将 ByteBuf 的内容读取到字节数组中
+        byteBuf.getBytes(byteBuf.readerIndex(), bytes);
+
+        // 创建 ByteArrayInputStream
+        return new ByteArrayInputStream(bytes);
+    }
 
     public static void saveByteBufToFile(ByteBuf byteBuf, String filePath) throws IOException {
         // 创建文件输出流
@@ -105,19 +116,8 @@ public class DownloadChannelInboundHandler extends SimpleChannelInboundHandler<H
         byteBuf.readerIndex(0);
     }
 
-    public static InputStream convertByteBufToInputStream(ByteBuf byteBuf) {
-        // 获取 ByteBuf 的可读字节数
-        int readableBytes = byteBuf.readableBytes();
-
-        // 创建一个新的字节数组
-        byte[] bytes = new byte[readableBytes];
-
-        // 将 ByteBuf 的内容读取到字节数组中
-        byteBuf.getBytes(byteBuf.readerIndex(), bytes);
-
-        // 创建 ByteArrayInputStream
-        return new ByteArrayInputStream(bytes);
+    @Override
+    public ThreadLocal<BasePayload> getThreadLocal() {
+        return DownloadChannelInboundHandler.minioSaveObjectThreadLocal;
     }
-
-
 }

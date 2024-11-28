@@ -1,8 +1,8 @@
 package com.levy.collection.flow.go.collector;
 
 
-import com.alibaba.fastjson2.JSON;
-import com.levy.collection.flow.dto.go.ModuleInfo;
+import com.alibaba.fastjson.JSON;
+import com.levy.collection.flow.go.dto.ModuleInfo;
 import com.levy.collection.flow.go.entity.GoModule;
 import com.levy.collection.flow.go.mapper.GoModuleMaper;
 import com.levy.collection.flow.go.service.GoModuleService;
@@ -84,7 +84,7 @@ public class $1ReadMoudleSplitter implements MessageSplitter<Object> {
         if(SourceTypeConstants.net.equals(dataSourceType)) {
             log.info("read module from net");
             Assert.notNull(moudleUrl, "moudleUrl must not be null");
-            String since = "2020-03-20T05:41:55.309Z";
+            String since = "";
             boolean getByNet = true;
             while (getByNet) {
                 try {

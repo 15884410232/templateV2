@@ -51,7 +51,7 @@ public class BackupPreparedStatementSetter extends ChannelMessageStorePreparedSt
         if (headers.getId() == null) {
             throw new SQLException("id is null");
         }
-        ps.setObject(1, headers.getId());
+        ps.setObject(1, headers.getId().toString());
         ps.setObject(2, Optional.ofNullable(headers.get(TASK_ID)).map(Object::toString).orElse(null));
         ps.setObject(3, Optional.ofNullable(headers.get(PARENT_ID)).map(Object::toString).orElse(null));
         ps.setObject(4, toJson(headers.get(PARENT_IDS)));

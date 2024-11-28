@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.levy.collection.flow.download.collector.base.DownloadChannelInboundHandler;
 import com.levy.collection.flow.download.collector.base.DownloadFile;
-import com.levy.collection.flow.dto.MinioSaveObject;
+import com.levy.collection.flow.download.collector.payload.MinioSaveObject;
 import com.levy.collection.mapper.OpenSourceSoftwareExtendMapper;
 //import com.levy.collection.service.store.Storage;
 import com.levy.dto.collection.constant.BucketConstants;
@@ -50,7 +50,7 @@ public class PythonDownloadProvider implements DownloadFile {
         String programmingLanguage= Language.PYTHON.getValue();
         log.info("开始查库");
         List<PythonDownLoadDto> list = openSourceSoftwareExtendMapper.getAllByProgrammingLanguage(programmingLanguage,
-                pageDTO.getSize(),pageDTO.getCurrent()*pageDTO.getSize());
+                pageDTO.getSize(),(pageDTO.getCurrent()-1)*pageDTO.getSize());
         log.info("结束查库");
         List<MinioSaveObject> resList=new ArrayList<>();
         list.forEach(item->{
@@ -74,14 +74,13 @@ public class PythonDownloadProvider implements DownloadFile {
         String downloadUrl = minioSaveObject.getDownloadUrl();
         Assert.notNull(downloadUrl,"downloadUrl is null");
         try {
-            NettyClient.newBuilder().setUrl(minioSaveObject.getDownloadUrl()).setSimpleChannelInboundHandler(downloadChannelInboundHandler)
+            NettyClient.newBuilder().setPayload(minioSaveObject).setUrl(minioSaveObject.getDownloadUrl()).setSimpleChannelInboundHandler(downloadChannelInboundHandler)
                     .buildBootstrap()
                     .connectAndSend();
 //            byte[] bytes = HttpUtils.get(downloadUrl, HttpResponse.BodyHandlers.ofByteArray());
 //            BufferedInputStream bufferedInputStream=new BufferedInputStream(new ByteArrayInputStream(bytes));
 //            storage.putObject(bucketName,minioSaveObject.getObjectName(),bufferedInputStream);
 //            bufferedInputStream.close();
-            log.info("下载成功:{}",minioSaveObject.getObjectName());
         }  catch (URISyntaxException e) {
             log.error("下载Url格式错误name：{},url:{}"+minioSaveObject.getObjectName(),minioSaveObject.getDownloadUrl());
             throw new RuntimeException(e);

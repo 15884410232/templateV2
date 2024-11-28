@@ -1,4 +1,4 @@
-package com.levy.collection.flow.dto.go;
+package com.levy.collection.flow.go.dto;
 
 import lombok.Data;
 

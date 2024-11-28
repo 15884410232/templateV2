@@ -169,7 +169,7 @@ public class Metadata {
         private LocalDateTime uploadTime;
 
         @JsonProperty("upload_time_iso_8601")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS][.SSS]'Z'")
         private LocalDateTime uploadTimeIso8601;
 
         private String url;

@@ -8,6 +8,7 @@ import com.levy.dto.collection.enumeration.FlowChannel;
 import com.levy.dto.collection.enumeration.FlowParameter;
 import com.levy.dto.integration.endpoint.MessageProcessor;
 import com.levy.dto.util.MD5Encryptor;
+import com.levy.dto.utils.IdUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +89,7 @@ public class $2ReadDetailProcessor implements MessageProcessor<GoModule> {
             repo=a.attr(herf);
         }
         OpenSourceSoftware openSourceSoftware = new OpenSourceSoftware();
-        openSourceSoftware.setId(generateId(goModule.getName(), goModule.getVersion()));
+        openSourceSoftware.setId(IdUtils.generateId(goModule.getName(), goModule.getVersion()));
         openSourceSoftware.setName(goModule.getName());
         openSourceSoftware.setVersion(goModule.getVersion());
         openSourceSoftware.setRepositoryUrl(repo);

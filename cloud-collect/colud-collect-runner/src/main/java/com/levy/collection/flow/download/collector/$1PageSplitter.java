@@ -53,6 +53,12 @@ public class $1PageSplitter implements MessageSplitter<Object>, ApplicationConte
             res.add(i+1);
         }
 //        return  List.of(1,2);
+//        //启动子线程处理
+//        Thread thread=new Thread(new RetryTask());
+//        thread.start();
+//
+//        ThreadPoolExecutor threadPoolExecutor=new ThreadPoolExecutor(1, 1, 0L, java.util.concurrent.TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(16));
+//        threadPoolExecutor.execute(new RetryTask());
         return  res;
     }
 

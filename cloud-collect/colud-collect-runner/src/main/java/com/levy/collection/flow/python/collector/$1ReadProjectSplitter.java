@@ -62,6 +62,8 @@ public class $1ReadProjectSplitter implements MessageSplitter<Object> {
         Assert.notNull(response, "response must not be null");
         Document document = Jsoup.parse(response);
         Elements elements = document.getElementsByTag("a");
-        return elements.stream().map(Element::html).toList();
+        List<String> list = elements.stream().map(Element::html).toList();
+        log.info(String.valueOf(list.size()));
+        return list;
     }
 }

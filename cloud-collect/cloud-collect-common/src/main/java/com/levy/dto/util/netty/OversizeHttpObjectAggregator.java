@@ -3,21 +3,22 @@ package com.levy.dto.util.netty;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpMessage;
 import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.TooLongHttpContentException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
+@Slf4j
 public class OversizeHttpObjectAggregator extends HttpObjectAggregator {
 
-    private static ArrayBlockingQueue<String> overSizereqUrl=new ArrayBlockingQueue<>(1024*1024);
+    public static ArrayBlockingQueue<BasePayload> overSizereqUrl=new ArrayBlockingQueue<>(1024*1024);
 
-    private static ThreadLocal<String> currentReqUrl=new ThreadLocal<>();
 
-    public OversizeHttpObjectAggregator(int maxContentLength) {
+    private BaseSimpleChannelInboundHandler baseSimpleChannelInboundHandler;
+
+    public OversizeHttpObjectAggregator(int maxContentLength,BaseSimpleChannelInboundHandler baseSimpleChannelInboundHandler) {
         super(maxContentLength);
-    }
-
-    public OversizeHttpObjectAggregator(int maxContentLength, boolean closeOnExpectationFailed) {
-        super(maxContentLength, closeOnExpectationFailed);
+        this.baseSimpleChannelInboundHandler=baseSimpleChannelInboundHandler;
     }
 
     /**
@@ -28,7 +29,13 @@ public class OversizeHttpObjectAggregator extends HttpObjectAggregator {
      */
     @Override
     protected void handleOversizedMessage(ChannelHandlerContext ctx, HttpMessage oversized) throws Exception {
-        overSizereqUrl.put(currentReqUrl.get());
-        super.handleOversizedMessage(ctx, oversized);
+        BasePayload basePayload = baseSimpleChannelInboundHandler.getThreadLocal().get();
+        basePayload.setSimpleChannelInboundHandler(baseSimpleChannelInboundHandler);
+        overSizereqUrl.put(basePayload);
+        try {
+            super.handleOversizedMessage(ctx, oversized);
+        }catch (TooLongHttpContentException tooLongHttpContentException){
+//            log.info("响应内容过大，加入重试队列basePayload:{}",basePayload);
+        }
     }
 }

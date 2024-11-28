@@ -21,8 +21,8 @@ public enum FlowParameter {
     JAVA_COLLECTOR_URL(Flow.JAVA_COLLECTOR, "url", "仓库索引地址", STRING, "https://repo1.maven.org/maven2/.index"),
     JAVA_COLLECTOR_INCREMENTAL(Flow.JAVA_COLLECTOR, "incremental", "是否增量采集", BOOLEAN),
     JAVA_COLLECTOR_FIRST_INCREMENTAL(Flow.JAVA_COLLECTOR, "firstIncremental", "起始增量索引", INTEGER, true),
-    PYTHON_COLLECTOR_SIMPLE_URL(Flow.PYTHON_COLLECTOR, "simpleUrl", "仓库地址", STRING),
-    PYTHON_COLLECTOR_JSON_URL(Flow.PYTHON_COLLECTOR, "jsonUrl", "明细地址", STRING),
+    PYTHON_COLLECTOR_SIMPLE_URL(Flow.PYTHON_COLLECTOR, "simpleUrl", "仓库地址", STRING,"https://pypi.org/simple/"),
+    PYTHON_COLLECTOR_JSON_URL(Flow.PYTHON_COLLECTOR, "jsonUrl", "明细地址", STRING,"https://pypi.org/pypi/"),
     JS_COLLECTOR_PACKAGE_URL(Flow.JAVASCRIPT_COLLECTOR, "moduleListUrl", "仓库地址", STRING),
     JS_COLLECTOR_DETAIL_URL(Flow.JAVASCRIPT_COLLECTOR, "detailUrl", "明细地址", STRING),
 

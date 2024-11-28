@@ -20,7 +20,7 @@ public class OpenSourceSoftware implements Serializable{
      * ID，组件唯一标识，根据的唯一属性集计算
      */
     @TableId(type = IdType.INPUT)
-    private String id;
+    private Long id;
 
     /**
      * 产品ID，与版本无关的组件唯一标识

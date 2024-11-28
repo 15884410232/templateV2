@@ -1,11 +1,10 @@
 package com.levy.dto.collection.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 /**
  * 开源软件表
@@ -17,9 +16,19 @@ import lombok.ToString;
 @TableName(value = "sca_cloud_open_source_software_extend")
 public class OpenSourceSoftwareExtend {
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.INPUT)
+    private Long id;
+    /**
+     * 审计字段-数据创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
+    /**
+     * 审计字段-更新时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime updateTime;
     /**
      * 名称
      */

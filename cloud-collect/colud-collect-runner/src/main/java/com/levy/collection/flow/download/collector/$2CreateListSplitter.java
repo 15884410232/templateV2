@@ -4,7 +4,7 @@ package com.levy.collection.flow.download.collector;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.levy.collection.flow.download.collector.base.DownloadFile;
-import com.levy.collection.flow.dto.MinioSaveObject;
+import com.levy.collection.flow.download.collector.payload.MinioSaveObject;
 import com.levy.dto.collection.constant.MessageHeaderConstants;
 import com.levy.dto.collection.enumeration.FlowChannel;
 import com.levy.dto.integration.endpoint.MessageSplitter;
@@ -69,7 +69,7 @@ public class $2CreateListSplitter implements MessageSplitter<Integer>, Applicati
 
     @Override
     public Integer concurrency() {
-        return 1;
+        return 24;
     }
 
 
