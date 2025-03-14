@@ -15,7 +15,15 @@ import java.time.Duration;
  */
 public class HttpUtils {
 
-    private static final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(60)).followRedirects(HttpClient.Redirect.NEVER).build();
+//    private static final HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(60)).followRedirects(HttpClient.Redirect.NEVER).build();
+
+    private static final HttpClient clientProxy1 = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.ALWAYS).build();
+    private static final HttpClient clientProxy2 = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.ALWAYS).build();
+    private static final HttpClient clientProxy3 = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.ALWAYS).build();
+    private static final HttpClient clientProxy4 = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.ALWAYS).build();
+    private static final HttpClient clientProxy5 = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.ALWAYS).build();
+    private static final HttpClient clientProxy6 = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.ALWAYS).build();
+
 
     public static InputStream get(String uri) throws IOException {
         return get(URI.create(uri), HttpResponse.BodyHandlers.ofInputStream(), 0, Duration.ZERO);
@@ -69,11 +77,27 @@ public class HttpUtils {
             try {
                 HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
                 try {
-                    HttpResponse<T> response = client.send(request, responseBodyHandler);
+                    int random = (int) (Math.random() * 6);
+                    HttpClient clientProxy = switch (random) {
+                        case 0 -> clientProxy1;
+                        case 1 -> clientProxy2;
+                        case 2 -> clientProxy3;
+                        case 3 -> clientProxy4;
+                        case 4 -> clientProxy5;
+                        case 5 -> clientProxy6;
+                        default -> throw new IllegalStateException("Unexpected value: " + random);
+                    };
+                    HttpResponse<T> response = clientProxy.send(request, responseBodyHandler);
                     if (response.statusCode() == HttpURLConnection.HTTP_OK) {
                         return response.body();
                     } else {
-                        throw new IOException("Unexpected response: " + response);
+                        if (response.statusCode() == 429) {
+                            //触发限流，让线程睡眠再重试
+                            //获取[5-10)之间的随机数  秒
+                            int second = (int) (Math.random() * (6));
+                            Thread.sleep(1000 * second);
+                            throw new IOException();
+                        }
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -90,6 +114,9 @@ public class HttpUtils {
                     Thread.currentThread().interrupt();
                     throw new IOException(ex);
                 }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                throw exception;
             }
         } while (true);
     }

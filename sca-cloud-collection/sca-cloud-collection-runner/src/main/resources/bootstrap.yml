@@ -1,5 +1,5 @@
 server:
-  port: 8231
+  port: 8235
 spring:
   application:
     name: sca-cloud-collection-runner

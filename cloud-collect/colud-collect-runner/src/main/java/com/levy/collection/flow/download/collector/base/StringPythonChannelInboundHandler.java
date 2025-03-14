@@ -49,10 +49,10 @@ public class StringPythonChannelInboundHandler extends BaseSimpleChannelInboundH
 
     private Charset charset = CharsetUtil.UTF_8;
 
-    @Override
-    public ThreadLocal<BasePayload> getThreadLocal() {
-        return minioSaveObjectThreadLocal;
-    }
+//    @Override
+//    public ThreadLocal<BasePayload> getThreadLocal() {
+//        return minioSaveObjectThreadLocal;
+//    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {

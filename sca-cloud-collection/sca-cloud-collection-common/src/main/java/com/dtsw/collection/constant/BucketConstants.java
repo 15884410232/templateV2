@@ -4,4 +4,6 @@ public class BucketConstants {
 
     public final static String PythonBucketName="python";
 
+    public final static String JsBucketName="javascript";
+
 }

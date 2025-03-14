@@ -12,6 +12,7 @@ import com.dtsw.integration.handler.RouterMessageHandler;
 import com.dtsw.integration.handler.SplitterMessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -27,9 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
+@Slf4j
 @AutoConfigureAfter(MessageChannelRegistrar.class)
 @RequiredArgsConstructor
 public class MessageHandlerRegistrar implements InitializingBean, ApplicationContextAware {
@@ -82,7 +83,14 @@ public class MessageHandlerRegistrar implements InitializingBean, ApplicationCon
             }
             PollingConsumer consumer = new PollingConsumer(channel, new InterceptorMessageHandler(interceptors, handler));
             BaseIntegrationConfig baseIntegrationConfig = this.applicationContext.getBean(BaseIntegrationConfig.class);
-            Executor executor = Executors.newFixedThreadPool(Optional.ofNullable(concurrency).orElse(baseIntegrationConfig.getConcurrency()));
+//            Executor executor = Executors.newFixedThreadPool(Optional.ofNullable(concurrency).orElse(baseIntegrationConfig.getConcurrency()));
+            //此处需要使用有界队列或者阻塞操作，因为轮询消息的线程池会根据轮询调度，
+            // 不停的向线程池中提交轮询任务，如果消息消费过程很慢，会导致轮询任务队列积压，
+            // 如果使用无界队列，就会导致内存占用不停的增加直到OOM
+            // 同事拒绝策略也不能使用阻塞模式，因为一旦提交任务的调度线程阻塞，会导致轮询任务无法继续执行，导致其他的消费者也阻塞，无法执行消费任务，所以直接丢弃掉任务即可
+            ThreadPoolExecutor executor = new ThreadPoolExecutor(Optional.ofNullable(concurrency).orElse(baseIntegrationConfig.getConcurrency()),
+                    Optional.ofNullable(concurrency).orElse(baseIntegrationConfig.getConcurrency()),
+                    0L, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),new ThreadPoolExecutor.DiscardPolicy());
             consumer.setTaskExecutor(executor);
             consumer.setBeanFactory(applicationContext);
             factory.registerSingleton(beanName + "PollingConsumer", consumer);

@@ -2,14 +2,15 @@ package com.dtsw.collection.test;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
-import com.dtsw.collection.dto.Metadata;
-import com.dtsw.collection.dto.PythonDownLoadDto;
-import com.dtsw.collection.flow.dto.go.ModuleInfo;
+import com.dtsw.collection.FlowTest;
+import com.dtsw.collection.constant.MessageHeaderConstants;
+import com.dtsw.collection.dto.python.Metadata;
+import com.dtsw.collection.dto.python.PythonDownLoadDto;
+import com.dtsw.collection.enumeration.FlowChannel;
+import com.dtsw.collection.enumeration.FlowParameter;
 import com.dtsw.collection.mapper.OpenSourceSoftwareExtendMapper;
 import com.dtsw.collection.service.store.Storage;
 import com.dtsw.collection.util.HttpUtils;
-import com.dtsw.collection.flow.download.collector.base.DownloadChannelInboundHandler;
-import com.dtsw.util.netty.NettyClient;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.messaging.Message;
@@ -33,16 +35,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.*;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @SpringBootTest
-public class PythonTest {
+public class PythonTest extends FlowTest {
 
     @Autowired
     @Qualifier("python.collect:readProject")
@@ -58,6 +61,12 @@ public class PythonTest {
     @Resource
     private OpenSourceSoftwareExtendMapper openSourceSoftwareExtendMapper;
 
+//    @Resource
+//    private DownloadChannelInboundHandler downloadChannelInboundHandler;
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
     @Test
     public void testSplitter() throws InterruptedException {
 //        System.out.println("start test splitter");
@@ -66,6 +75,19 @@ public class PythonTest {
 //        splitterForm.send(message);
 //        System.out.println("end test splitter");
 //        Thread.sleep(1000000);
+    }
+
+
+    @Test
+    public void tests23() throws InterruptedException {
+        MessageChannel channel = getChannel(FlowChannel.PYTHON_COLLECTOR_GATEWAY.getChannel());
+        MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload("");
+        stringMessageBuilder.setHeader(MessageHeaderConstants.TASK_ID, UUID.randomUUID());
+        stringMessageBuilder.setHeader(FlowParameter.PYTHON_COLLECTOR_SIMPLE_URL.getName(),FlowParameter.PYTHON_COLLECTOR_SIMPLE_URL.getExample());
+        stringMessageBuilder.setHeader(FlowParameter.PYTHON_COLLECTOR_JSON_URL.getName(), FlowParameter.PYTHON_COLLECTOR_JSON_URL.getExample());
+        Message<String> message = stringMessageBuilder.build();
+        channel.send(message);
+        Thread.sleep(1000000000);
     }
 
     @Test
@@ -179,22 +201,63 @@ public class PythonTest {
         }
     }
 
-    @Test
-    public void test12() throws URISyntaxException, InterruptedException {
-        String url="https://files.pythonhosted.org/packages/fa/08/9466b723c7709192dcd93328b028500c2871462b0ba0aee809f2d9b5844d/tahrir-api-0.2.7.tar.gz";
-        NettyClient.newBuilder().setUrl(url).setSimpleChannelInboundHandler(DownloadChannelInboundHandler.getInstance())
-                .buildBootstrap().connectAndSend();
-        System.out.println("发送完毕====================================================================================================");
-        Thread.sleep(100000);
-    }
+//    @Test
+//    public void test12() throws URISyntaxException, InterruptedException {
+//        String url="https://files.pythonhosted.org/packages/fa/08/9466b723c7709192dcd93328b028500c2871462b0ba0aee809f2d9b5844d/tahrir-api-0.2.7.tar.gz";
+//        NettyClient.newBuilder().setUrl(url).setSimpleChannelInboundHandler(DownloadChannelInboundHandler.getInstance())
+//                .buildBootstrap().connectAndSend();
+//        System.out.println("发送完毕====================================================================================================");
+//        Thread.sleep(100000);
+//    }
+
+//    @Test
+//    public void test123() throws URISyntaxException, InterruptedException, ParseException {
+//        String url="UNKNOWN";
+//        NettyClient.newBuilder().setPayload(new JavaScriptStringPayLoad(url)).setUrl(url)
+//                .setSimpleChannelInboundHandler(downloadChannelInboundHandler).buildBootstrap().connectAndSend();
+//
+//    }
 
     @Test
-    public void test123() throws URISyntaxException, InterruptedException {
-        String url= """
-{"Path":"golang.org/x/text","Version":"v0.3.0","Timestamp":"2019-04-10T19:08:52.997264Z"}
-                """;
-        ModuleInfo moduleInfo = JSON.parseObject(url, ModuleInfo.class);
-        log.info(JSON.toJSONString(moduleInfo));
+    public void test1234() throws ParseException {
+//        String date="2023-02-22 18:53:39.676";
+//        ZonedDateTime zonedDateTime=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(date).toInstant().atZone(ZoneId.systemDefault());
+//        log.info(zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")));
+
+
+        Object test = redisTemplate.opsForValue().get("test");
+        log.info(String.valueOf(test));
+
+//        JedisConnection connection = null;
+//        try {
+//            // 从 RedisTemplate 获取 RedisConnectionFactory 然后获取 RedisConnection
+//            connection = (JedisConnection) redisTemplate.getConnectionFactory().getConnection();
+//            // 获取当前数据库索引
+//            return connection.get
+//        } finally {
+//            // 确保连接被关闭以避免资源泄露
+//            if (connection != null) {
+//                connection.close();
+//            }
+//        }
+
     }
+
+
+
+    @Test
+    public void test4242() throws InterruptedException {
+
+//        DownloadChannelInboundHandler downloadChannelInboundHandler=new DownloadChannelInboundHandler();
+//        MinioSaveObject basePayload=new MinioSaveObject();
+//        basePayload.setBucketName("python");
+//        basePayload.setDownloadUrl("https://files.pythonhosted.org/packages/37/a5/8a84ebfc61f8ddebf101bae6eab834a0f1ba482dc02aa25ace96943b3aa6/pygamepal-0.3.4.tar.gz");
+//        downloadChannelInboundHandler.setBasePayload(basePayload);
+//        NettyClient.send("download", downloadChannelInboundHandler,basePayload);
+//
+//        Thread.sleep(10000000);
+    }
+
+
 
 }

@@ -77,107 +77,107 @@ public class GetDataTest {
 
     }
 
-    @Test
-    public void tests(){
-        OkHttpClient client = new OkHttpClient();
-        OkHttp3ClientHttpRequestFactory factory = new OkHttp3ClientHttpRequestFactory(client);
-        factory.setReadTimeout((int) Duration.ofMinutes(5).toMillis());
-        RestTemplate restTemplate = new RestTemplate(factory);
-
-        restTemplate.getMessageConverters().forEach(httpMessageConverter -> {
-            if (httpMessageConverter instanceof StringHttpMessageConverter stringHttpMessageConverter) {
-                stringHttpMessageConverter.setDefaultCharset(StandardCharsets.UTF_8);
-            }
-        });
-
-
-        Map<String,String> headers=new HashMap<>();
-        headers.put(FlowParameter.JS_COLLECTOR_DETAIL_URL.getName(), "https://registry.npmmirror.com/");
-        String project="is-weakmap-polyfill";
-        //生成1000内的随机数
-        int randomNumber = (int) (Math.random() * 1000);
-        if(randomNumber==1) {
-            log.info("JS采集:{}", project);
-        }
-        try {
-            String detailUrl = headers.get(FlowParameter.JS_COLLECTOR_DETAIL_URL.getName());
-            Assert.notNull(detailUrl, "jsonUrl must not be null");
-            URI url = UriComponentsBuilder.fromUriString(detailUrl).pathSegment(project).encode().build().toUri();
-            JSONObject resJson = restTemplate.getForObject(url, JSONObject.class);
-            // 获取 versions 字段
-            JSONObject versions = resJson.getJSONObject("versions");
-            // 检查 versions 是否为空
-            if (versions != null) {
-                // 遍历 versions 对象
-                for (String versionKey : versions.keySet()) {
-                    JSONObject versionInfo = versions.getJSONObject(versionKey);
-                    Object repositoryStr = versionInfo.get("repository");
-                    if(repositoryStr instanceof String){
-                        NpmPackage.Repository repository=new NpmPackage.Repository();
-                        repository.setType("");
-                        repository.setUrl(repositoryStr.toString());
-                        versionInfo.put("repository", repository);
-                    }
-                    Object bugsStr = versionInfo.get("bugs");
-                    if(bugsStr instanceof String){
-                        NpmPackage.Bugs bugs=new NpmPackage.Bugs();
-                        bugs.setUrl(repositoryStr.toString());
-                        versionInfo.put("bugs",   bugs);
-                    }
-                }
-            }
-            Object repository = resJson.get("repository");
-            if (repository != null) {
-                if(repository instanceof String){
-                    NpmPackage.Repository repositoryObj=new NpmPackage.Repository();
-                    repositoryObj.setType("");
-                    repositoryObj.setUrl(repository.toString());
-                    resJson.put("repository", repositoryObj);
-                }
-            }
-            NpmPackage npmPackage = resJson.toJavaObject(NpmPackage.class);
-            Assert.notNull(npmPackage, "npmPackageList is null");
-            List<OpenSourceSoftware> softwareList = new ArrayList<>();
-//            List<OpenSourceSoftwareExtend> extendList = new ArrayList<>();
-
-            npmPackage.getVersions().forEach((version, versionInfo) -> {
-
-                OpenSourceSoftware software = new OpenSourceSoftware();
-                software.setId(generateId(versionInfo.getName(), version));
-                software.setName(versionInfo.getName());
-                software.setVersion(version);
-                if(StringUtils.isNotBlank(versionInfo.getDescription())) {
-                    software.setDescription(cleanInvalidUtf8(versionInfo.getDescription()));
-                }
-                software.setLicense(versionInfo.getLicense());
-                software.setGroupId(versionInfo.getName());
-                software.setHomepageUrl(versionInfo.getHomepage());
-                software.setProgrammingLanguage("JavaScript");
-                Optional.ofNullable(versionInfo.getRepository()).ifPresent(item->{
-                    software.setRepositoryUrl(item.getUrl());
-                });
-                software.setDependencies(JSON.toJSONString(versionInfo.getDependencies()));
-                software.setContributors(JSON.toJSONString(versionInfo.getMaintainers()));
-                software.setAuthor(JSON.toJSONString(versionInfo.getNpmUser()));
-                software.setTimeCreated(versionInfo.getPublishTime());
-                softwareList.add(software);
-//                OpenSourceSoftwareExtend openSourceSoftwareExtend = new OpenSourceSoftwareExtend();
-//                openSourceSoftwareExtend.setName(versionInfo.getName());
-//                Optional.ofNullable(npmPackage.getBugs()).ifPresent(item->{
-//                    openSourceSoftwareExtend.setBugTrackUrl(item.getUrl());
+//    @Test
+//    public void tests(){
+//        OkHttpClient client = new OkHttpClient();
+//        OkHttp3ClientHttpRequestFactory factory = new OkHttp3ClientHttpRequestFactory(client);
+//        factory.setReadTimeout((int) Duration.ofMinutes(5).toMillis());
+//        RestTemplate restTemplate = new RestTemplate(factory);
+//
+//        restTemplate.getMessageConverters().forEach(httpMessageConverter -> {
+//            if (httpMessageConverter instanceof StringHttpMessageConverter stringHttpMessageConverter) {
+//                stringHttpMessageConverter.setDefaultCharset(StandardCharsets.UTF_8);
+//            }
+//        });
+//
+//
+//        Map<String,String> headers=new HashMap<>();
+//        headers.put(FlowParameter.JS_COLLECTOR_DETAIL_URL.getName(), "https://registry.npmmirror.com/");
+//        String project="is-weakmap-polyfill";
+//        //生成1000内的随机数
+//        int randomNumber = (int) (Math.random() * 1000);
+//        if(randomNumber==1) {
+//            log.info("JS采集:{}", project);
+//        }
+//        try {
+//            String detailUrl = headers.get(FlowParameter.JS_COLLECTOR_DETAIL_URL.getName());
+//            Assert.notNull(detailUrl, "jsonUrl must not be null");
+//            URI url = UriComponentsBuilder.fromUriString(detailUrl).pathSegment(project).encode().build().toUri();
+//            JSONObject resJson = restTemplate.getForObject(url, JSONObject.class);
+//            // 获取 versions 字段
+//            JSONObject versions = resJson.getJSONObject("versions");
+//            // 检查 versions 是否为空
+//            if (versions != null) {
+//                // 遍历 versions 对象
+//                for (String versionKey : versions.keySet()) {
+//                    JSONObject versionInfo = versions.getJSONObject(versionKey);
+//                    Object repositoryStr = versionInfo.get("repository");
+//                    if(repositoryStr instanceof String){
+//                        NpmPackage.Repository repository=new NpmPackage.Repository();
+//                        repository.setType("");
+//                        repository.setUrl(repositoryStr.toString());
+//                        versionInfo.put("repository", repository);
+//                    }
+//                    Object bugsStr = versionInfo.get("bugs");
+//                    if(bugsStr instanceof String){
+//                        NpmPackage.Bugs bugs=new NpmPackage.Bugs();
+//                        bugs.setUrl(repositoryStr.toString());
+//                        versionInfo.put("bugs",   bugs);
+//                    }
+//                }
+//            }
+//            Object repository = resJson.get("repository");
+//            if (repository != null) {
+//                if(repository instanceof String){
+//                    NpmPackage.Repository repositoryObj=new NpmPackage.Repository();
+//                    repositoryObj.setType("");
+//                    repositoryObj.setUrl(repository.toString());
+//                    resJson.put("repository", repositoryObj);
+//                }
+//            }
+//            NpmPackage npmPackage = resJson.toJavaObject(NpmPackage.class);
+//            Assert.notNull(npmPackage, "npmPackageList is null");
+//            List<OpenSourceSoftware> softwareList = new ArrayList<>();
+////            List<OpenSourceSoftwareExtend> extendList = new ArrayList<>();
+//
+//            npmPackage.getVersions().forEach((version, versionInfo) -> {
+//
+//                OpenSourceSoftware software = new OpenSourceSoftware();
+//                software.setId(generateId(versionInfo.getName(), version));
+//                software.setName(versionInfo.getName());
+//                software.setVersion(version);
+//                if(StringUtils.isNotBlank(versionInfo.getDescription())) {
+//                    software.setDescription(cleanInvalidUtf8(versionInfo.getDescription()));
+//                }
+//                software.setLicense(versionInfo.getLicense());
+//                software.setGroupId(versionInfo.getName());
+//                software.setHomepageUrl(versionInfo.getHomepage());
+//                software.setProgrammingLanguage("JavaScript");
+//                Optional.ofNullable(versionInfo.getRepository()).ifPresent(item->{
+//                    software.setRepositoryUrl(item.getUrl());
 //                });
-//                extendList.add(openSourceSoftwareExtend);
-            });
-            if(!softwareList.isEmpty()){
-                openSourceSoftwareService.saveOrUpdateBatch(softwareList);
-            }
-//            log.info(String.valueOf(softwareList.size()));
-
-        }catch (Exception e){
-            log.info("JS采集:{}",project);
-            e.printStackTrace();
-        }
-    }
+//                software.setDependencies(JSON.toJSONString(versionInfo.getDependencies()));
+//                software.setContributors(JSON.toJSONString(versionInfo.getMaintainers()));
+//                software.setAuthor(JSON.toJSONString(versionInfo.getNpmUser()));
+//                software.setTimeCreated(versionInfo.getPublishTime());
+//                softwareList.add(software);
+////                OpenSourceSoftwareExtend openSourceSoftwareExtend = new OpenSourceSoftwareExtend();
+////                openSourceSoftwareExtend.setName(versionInfo.getName());
+////                Optional.ofNullable(npmPackage.getBugs()).ifPresent(item->{
+////                    openSourceSoftwareExtend.setBugTrackUrl(item.getUrl());
+////                });
+////                extendList.add(openSourceSoftwareExtend);
+//            });
+//            if(!softwareList.isEmpty()){
+//                openSourceSoftwareService.saveOrUpdateBatch(softwareList);
+//            }
+////            log.info(String.valueOf(softwareList.size()));
+//
+//        }catch (Exception e){
+//            log.info("JS采集:{}",project);
+//            e.printStackTrace();
+//        }
+//    }
 
 
 

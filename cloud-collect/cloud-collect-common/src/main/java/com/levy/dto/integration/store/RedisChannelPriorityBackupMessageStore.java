@@ -40,7 +40,7 @@ public class RedisChannelPriorityBackupMessageStore extends RedisChannelPriority
     @Transactional
     @Override
     public MessageGroup addMessageToGroup(Object groupId, Message<?> message) {
-        backupMessageStore.addMessageToGroup(groupId, message);
+//        backupMessageStore.addMessageToGroup(groupId, message);
         return super.addMessageToGroup(groupId, message);
     }
 }

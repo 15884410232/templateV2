@@ -1,5 +1,8 @@
-//package com.levy.dto.util.netty;
+//package com.levy.dto.util.netty2;
 //
+//import com.levy.dto.util.netty.BasePayload;
+//import com.levy.dto.util.netty.BaseSimpleChannelInboundHandler;
+//import com.levy.dto.util.netty.MyChannelInitializer;
 //import io.netty.bootstrap.Bootstrap;
 //import io.netty.buffer.Unpooled;
 //import io.netty.channel.ChannelFuture;
@@ -17,9 +20,8 @@
 //import java.util.concurrent.ConcurrentHashMap;
 //
 //@Slf4j
-//public class NettyClient {
+//public class NettyClient2 {
 //    private static final ConcurrentHashMap<String,Integer> maxContentLengthMap=new ConcurrentHashMap <>();
-//    private static final ConcurrentHashMap<String,Bootstrap> bootstrapMap=new ConcurrentHashMap <>();
 //    //最大下载内容不能超过102M，防止无限重试，超过极限大小
 //    private static final int OversizeMaxContentLength=1024*1024*102;
 //    private int defaultMaxContentLength=1024*1024*1;
@@ -30,7 +32,7 @@
 //    private Bootstrap bootstrap;
 //    private static EventLoopGroup group = new NioEventLoopGroup(512);
 //    public BasePayload payload;
-//    private NettyClient(){
+//    private NettyClient2(){
 //
 //    }
 //
@@ -39,9 +41,9 @@
 //    }
 //
 //    public static class NettyClientBuilder {
-//        private final NettyClient nettyClient;
+//        private final NettyClient2 nettyClient;
 //        private NettyClientBuilder(){
-//            nettyClient=new NettyClient();
+//            nettyClient=new NettyClient2();
 //        }
 //
 //        public NettyClientBuilder setPayload(BasePayload payload) {
@@ -75,7 +77,7 @@
 //            nettyClient.simpleChannelInboundHandler=simpleChannelInboundHandler;
 //            return this;
 //        }
-//        public NettyClient buildBootstrap(int maxContentLength){
+//        public NettyClient2 buildBootstrap(int maxContentLength){
 //            Assert.notNull(nettyClient.uri, "url can not be null");
 //            Assert.notNull(nettyClient.simpleChannelInboundHandler, "simpleChannelInboundHandler can not be null");
 //
@@ -114,7 +116,7 @@
 //         * 创建Bootstrap
 //         * @return
 //         */
-//        public NettyClient buildBootstrap(){
+//        public NettyClient2 buildBootstrap(){
 //            return this.buildBootstrap(0);
 //        }
 //

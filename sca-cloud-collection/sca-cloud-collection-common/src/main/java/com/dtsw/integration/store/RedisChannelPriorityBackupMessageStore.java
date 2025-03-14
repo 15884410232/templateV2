@@ -1,7 +1,9 @@
 package com.dtsw.integration.store;
 
+import com.dtsw.integration.annotation.BaseIntegrationConfig;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.integration.IntegrationMessageHeaderAccessor;
 import org.springframework.integration.redis.store.RedisChannelPriorityMessageStore;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Wangwang Tang
  * @since 2024-11-01
  */
+@Slf4j
 @Getter
 @Setter
 public class RedisChannelPriorityBackupMessageStore extends RedisChannelPriorityMessageStore {
@@ -32,15 +35,43 @@ public class RedisChannelPriorityBackupMessageStore extends RedisChannelPriority
      */
     private ChannelMessageStore backupMessageStore;
 
+    private BaseIntegrationConfig baseIntegrationConfig;
+
     public RedisChannelPriorityBackupMessageStore(RedisConnectionFactory connectionFactory, ChannelMessageStore backupMessageStore) {
         super(connectionFactory);
         this.backupMessageStore = backupMessageStore;
     }
 
+    public RedisChannelPriorityBackupMessageStore(RedisConnectionFactory connectionFactory, ChannelMessageStore backupMessageStore,BaseIntegrationConfig baseIntegrationConfig) {
+        super(connectionFactory);
+        this.backupMessageStore = backupMessageStore;
+        this.baseIntegrationConfig = baseIntegrationConfig;
+    }
+
     @Transactional
     @Override
     public MessageGroup addMessageToGroup(Object groupId, Message<?> message) {
-        backupMessageStore.addMessageToGroup(groupId, message);
+//        backupMessageStore.addMessageToGroup(groupId, message);
         return super.addMessageToGroup(groupId, message);
+    }
+
+    @Override
+    public Message<?> pollMessageFromGroup(Object groupId) {
+
+        if (baseIntegrationConfig != null&&
+                baseIntegrationConfig.getPauseChannel()!=null){
+            if(baseIntegrationConfig.getPauseChannel().contains(groupId)){
+                return null;
+            }else if(BaseIntegrationConfig.pauseAll.equals(baseIntegrationConfig.getPasuseAllChannel())){
+                return null;
+            }
+        }
+        Message<?> message=null;
+        try {
+            message = super.pollMessageFromGroup(groupId);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return message;
     }
 }

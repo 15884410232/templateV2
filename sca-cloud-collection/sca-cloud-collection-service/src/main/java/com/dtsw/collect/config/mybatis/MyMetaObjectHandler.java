@@ -21,6 +21,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     // 更新时的填充策略
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("updateTime", new Date(), metaObject);
+        this.setFieldValByName("updateTime",  LocalDateTime.now(), metaObject);
     }
 }

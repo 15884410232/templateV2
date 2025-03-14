@@ -6,10 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
 
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
@@ -23,7 +24,7 @@ public abstract class BaseEntity {
     /**
      * 审计字段-更新时间
      */
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
 }

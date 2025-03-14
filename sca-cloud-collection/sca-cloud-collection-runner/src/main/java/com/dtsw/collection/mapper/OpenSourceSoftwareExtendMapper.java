@@ -1,7 +1,7 @@
 package com.dtsw.collection.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.dtsw.collection.dto.PythonDownLoadDto;
+import com.dtsw.collection.dto.python.PythonDownLoadDto;
 import com.dtsw.collection.entity.OpenSourceSoftwareExtend;
 import org.apache.ibatis.annotations.Param;
 

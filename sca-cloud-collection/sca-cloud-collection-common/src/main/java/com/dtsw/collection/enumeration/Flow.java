@@ -24,6 +24,10 @@ public enum Flow implements IEnum<String> {
     JAVASCRIPT_COLLECTOR(JAVA_SCRIPT, "采集程序"),
     DOWNLOAD_RESOVLE(ALL, "下载程序"),
     GO_COLLECTOR(Go, "采集程序"),
+    C_SHARP_COLLECTOR(C_SHARP, "采集程序"),
+    C_C_PLUS_COLLECTOR(C_C_PLUS_PLUS, "采集程序"),
+    SCANNER_RESOVLE(ALL, "扫描加密程序"),
+    LICENCE_COLLECTOR(ALL, "采集程序"),
     ;
 
     /** 所属语言 */

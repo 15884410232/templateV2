@@ -5,7 +5,7 @@
 <mapper namespace="com.dtsw.collection.mapper.OpenSourceSoftwareExtendMapper">
 
 
-    <select id="getAllByProgrammingLanguage" resultType="com.dtsw.collection.dto.PythonDownLoadDto">
+    <select id="getAllByProgrammingLanguage" resultType="com.dtsw.collection.dto.python.PythonDownLoadDto">
         select
             t01.download_url,t02.name,t02.version
         from sca_cloud_open_source_software_extend t01,

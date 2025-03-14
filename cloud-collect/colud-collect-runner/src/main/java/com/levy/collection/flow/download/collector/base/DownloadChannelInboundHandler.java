@@ -1,6 +1,7 @@
 package com.levy.collection.flow.download.collector.base;
 
 
+import com.alibaba.fastjson.JSON;
 import com.levy.collection.flow.download.collector.payload.MinioSaveObject;
 import com.levy.dto.util.netty.BasePayload;
 import com.levy.dto.util.netty.BaseSimpleChannelInboundHandler;
@@ -36,45 +37,72 @@ public class DownloadChannelInboundHandler extends BaseSimpleChannelInboundHandl
 
     private Charset charset = CharsetUtil.UTF_8;
 
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        // 获取远程地址
+//        InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+//        String remoteIp = remoteAddress.getAddress().getHostAddress();
+//        int remotePort = remoteAddress.getPort();
+//
+//        System.out.println("Connected to: " + remoteIp + ":" + remotePort);
+
+        super.channelActive(ctx);
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+//        log.info("channelReadComplete");
+        super.channelReadComplete(ctx);
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        log.info("channelRead");
+        super.channelRead(ctx, msg);
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+        log.info("channelRead0");
+
         if (msg instanceof HttpResponse) {
-                HttpResponse response = (HttpResponse) msg;
-                if (response.status().code()!=200) {
-                    log.error("Non-200 status code received: " + response.status().code());
+            HttpResponse response = (HttpResponse) msg;
+            if (response.status().code() != 200) {
+                log.error("Non-200 status code received: " + response.status().code());
+                ctx.close();
+                return;
+            }
+        }
+        if (msg instanceof HttpContent) {
+            log.info("go");
+            log.info(JSON.toJSONString(this.getBasePayload()));
+            HttpContent content = (HttpContent) msg;
+            ByteBuf buf = content.content();
+            log.info(String.valueOf(buf.readableBytes()));
+            try {
+                //将buf保存为文件到本地文件夹中
+                MinioSaveObject minioSaveObject = (MinioSaveObject) this.getBasePayload();
+                if (minioSaveObject == null) {
                     ctx.close();
                     return;
                 }
-        }
-            if (msg instanceof HttpContent) {
-                HttpContent content = (HttpContent) msg;
-                ByteBuf buf = content.content();
-                try {
-                    //将buf保存为文件到本地文件夹中
-                    MinioSaveObject minioSaveObject = (MinioSaveObject) DownloadChannelInboundHandler.minioSaveObjectThreadLocal.get();
-                    if (minioSaveObject == null) {
-                        ctx.close();
-                        return;
-                    }
-                    String downloadUrl = minioSaveObject.getDownloadUrl();
-                    //截取文件名
-                    String fileName = downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1);
-                    FileOutputStream fileOutputStream = new FileOutputStream("D:\\pythonSourcePackage\\" + fileName);
-                    InputStream inputStream = convertByteBufToInputStream(buf);
+                String downloadUrl = minioSaveObject.getDownloadUrl();
+                //截取文件名
+                String fileName = downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1);
+                FileOutputStream fileOutputStream = new FileOutputStream("D:\\pythonSourcePackage\\" + System.currentTimeMillis()+fileName);
+                InputStream inputStream = convertByteBufToInputStream(buf);
 //                saveByteBufToFile(buf, "D:\\tahrir-api-0.2.7.tar.gz");
-                    fileOutputStream.write(inputStream.readAllBytes());
-                    fileOutputStream.close();
-                    inputStream.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                if (content instanceof LastHttpContent) {
-                    ctx.close();
-                }
+                fileOutputStream.write(inputStream.readAllBytes());
+                fileOutputStream.close();
+                inputStream.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
+            if (content instanceof LastHttpContent) {
+                ctx.close();
+            }
+        }
     }
-
 
 
     public static InputStream convertByteBufToInputStream(ByteBuf byteBuf) {
@@ -116,8 +144,8 @@ public class DownloadChannelInboundHandler extends BaseSimpleChannelInboundHandl
         byteBuf.readerIndex(0);
     }
 
-    @Override
-    public ThreadLocal<BasePayload> getThreadLocal() {
-        return DownloadChannelInboundHandler.minioSaveObjectThreadLocal;
-    }
+//    @Override
+//    public ThreadLocal<BasePayload> getThreadLocal() {
+//        return DownloadChannelInboundHandler.minioSaveObjectThreadLocal;
+//    }
 }

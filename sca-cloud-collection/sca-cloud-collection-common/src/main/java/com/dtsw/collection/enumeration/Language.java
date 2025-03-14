@@ -17,10 +17,12 @@ public enum Language implements IEnum<String> {
     JAVA("Java", "Java"),
     C("C", "C"),
     C_PLUS_PLUS("C++", "C++"),
+    C_C_PLUS_PLUS("C:C++", "C:C++"),
     C_SHARP("C#", "C#"),
     JAVA_SCRIPT("JavaScript", "JavaScript"),
     PYTHON("Python", "Python"),
     Go("Go", "Go"),
+    DART("Dart", "Dart"),
     ;
 
     /** 唯一标识 */

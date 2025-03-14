@@ -4,6 +4,7 @@ import com.dtsw.collection.config.support.TaskChunkStatusInterceptor;
 import com.dtsw.collection.mapper.TaskChunkMapper;
 import com.dtsw.collection.support.BackupMessageStoreQueryProvider;
 import com.dtsw.collection.support.BackupPreparedStatementSetter;
+import com.dtsw.integration.annotation.BaseIntegrationConfig;
 import com.dtsw.integration.annotation.IntegrationConfigurer;
 import com.dtsw.integration.store.RedisChannelPriorityBackupMessageStore;
 import com.dtsw.integration.support.MessageChannelRegistrar;
@@ -23,6 +24,8 @@ public class IntegrationConfig implements IntegrationConfigurer {
 
     private final TaskChunkMapper taskChunkMapper;
 
+    private final BaseIntegrationConfig baseIntegrationConfig;
+
     @Override
     public void addInterceptors(MessageInterceptorRegistry registry) {
         registry.addInterceptor(new TaskChunkStatusInterceptor(taskChunkMapper)).order(Integer.MIN_VALUE);
@@ -39,7 +42,7 @@ public class IntegrationConfig implements IntegrationConfigurer {
     @Bean
     public RedisChannelPriorityBackupMessageStore redisChannelBackupMessageStore(RedisConnectionFactory redisConnectionFactory,
                                                                                  JdbcChannelMessageStore backupMessageStore) {
-        return new RedisChannelPriorityBackupMessageStore(redisConnectionFactory, backupMessageStore);
+        return new RedisChannelPriorityBackupMessageStore(redisConnectionFactory, backupMessageStore,baseIntegrationConfig);
     }
 
     @Bean

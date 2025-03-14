@@ -3,6 +3,8 @@ package com.levy.dto.util.netty;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpObject;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.ConnectException;
@@ -10,8 +12,9 @@ import java.net.ConnectException;
 @Slf4j
 public abstract class BaseSimpleChannelInboundHandler extends SimpleChannelInboundHandler<HttpObject> {
 
-
-    abstract public ThreadLocal<BasePayload> getThreadLocal();
+    @Getter
+    @Setter
+    private BasePayload basePayload;
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

@@ -9,7 +9,6 @@ import com.levy.dto.collection.dto.js.NpmPackage;
 import com.levy.dto.collection.entity.OpenSourceSoftware;
 import com.levy.dto.collection.enumeration.Language;
 import com.levy.dto.util.MD5Encryptor;
-import com.levy.dto.util.netty.BasePayload;
 import com.levy.dto.util.netty.BaseSimpleChannelInboundHandler;
 import com.levy.dto.utils.IdUtils;
 import io.netty.buffer.ByteBuf;
@@ -183,8 +182,8 @@ public class StringChannelInboundHandler extends BaseSimpleChannelInboundHandler
         return invalidUtf8Pattern.matcher(input).replaceAll("");
     }
 
-    @Override
-    public ThreadLocal<BasePayload> getThreadLocal() {
-        return null;
-    }
+//    @Override
+//    public ThreadLocal<BasePayload> getThreadLocal() {
+//        return null;
+//    }
 }

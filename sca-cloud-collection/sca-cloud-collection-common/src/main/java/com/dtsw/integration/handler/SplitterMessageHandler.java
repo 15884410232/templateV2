@@ -41,10 +41,14 @@ public class SplitterMessageHandler extends AbstractMessageHandler implements Me
             }
 
             PollableChannel channel = applicationContext.getBean(splitter.to(), PollableChannel.class);
-
+//            log.info("开始写入redis");
+            long start = System.currentTimeMillis();
             for (Object element : result) {
                 sendMessage(channel, element, message.getHeaders());
             }
+//            log.info("结束写入redis");
+            long end = System.currentTimeMillis();
+//            log.info("写入redis耗时：" + (end - start));
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {

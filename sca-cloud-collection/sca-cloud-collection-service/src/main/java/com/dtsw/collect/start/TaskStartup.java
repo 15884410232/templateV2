@@ -49,6 +49,7 @@ public class TaskStartup implements ApplicationContextAware {
         List<Task> tasks = taskMapper.selectList(lambdaQueryWrapper);
         for (Task task : tasks) {
             try {
+                log.info("启动任务"+task.getName());
                 Source source = Optional.ofNullable(softwareSourceMapper.selectById(task.getSourceId())).orElseThrow();
                 Map<String, Object> params = task.getParams();
                 MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload("");

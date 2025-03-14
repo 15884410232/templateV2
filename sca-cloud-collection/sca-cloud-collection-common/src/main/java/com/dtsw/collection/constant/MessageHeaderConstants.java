@@ -24,5 +24,7 @@ public interface MessageHeaderConstants {
 
     String DOWNLOAD="Download";
 
+    String SCANNER="Scanner";
+
     String BEAN_NAME="beanName";
 }

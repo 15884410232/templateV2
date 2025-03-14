@@ -54,7 +54,13 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>example-artifact</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>D:\encryption-identify.jar</systemPath>
+        </dependency>
 
     </dependencies>
 

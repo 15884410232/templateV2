@@ -49,6 +49,7 @@ public class RouterMessageHandler extends AbstractMessageHandler implements Mess
 
             PollableChannel channel = applicationContext.getBean(toChannel, PollableChannel.class);
             sendMessage(channel, message.getPayload(), message.getHeaders());
+
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {

@@ -18,6 +18,16 @@
     </properties>
 
     <dependencies>
+                <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+                <dependency>
+            <groupId>com.dtsw</groupId>
+            <artifactId>sca-cloud-collection-licence</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.dtsw</groupId>
             <artifactId>sca-cloud-collection-common</artifactId>
@@ -105,7 +115,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-<!--            <version>4.10.0</version>-->
+            <!--            <version>4.10.0</version>-->
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
@@ -113,6 +123,52 @@
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
             <version>2.0.53</version>
+        </dependency>
+
+        <!--mvn install:install-file -Dfile=D:\scanner\jar\encryption-identify-1.0-jar-with-dependencies.jar -DgroupId=com.scanner -DartifactId=encryption.identify -Dversion=1.0.0 -Dpackaging=jar-->
+        <dependency>
+            <groupId>com.scanner</groupId>
+            <artifactId>encryption.identify</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--mvn install:install-file -Dfile=D:\scanner\jar\pmd-java-identifier-1.0.1.jar -DgroupId=com.scanner -DartifactId=encryption.identify -Dversion=1.0.0 -Dpackaging=jar-->
+        <dependency>
+            <groupId>com.scanner</groupId>
+            <artifactId>encryption.pmd</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- 调用命令行依赖 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-exec</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.commons</groupId>-->
+        <!--            <artifactId>commons-csv</artifactId>-->
+        <!--            <version>1.11.0</version>-->
+        <!--        </dependency>-->
+
+        <!--        &lt;!&ndash; vfs &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.commons</groupId>-->
+        <!--            <artifactId>commons-vfs2</artifactId>-->
+        <!--            <version>2.9.0</version>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.antlr</groupId>-->
+        <!--            <artifactId>antlr4-runtime</artifactId>-->
+        <!--            <version>4.13.2</version>-->
+        <!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.42.0.0</version> <!-- 请根据需要选择最新版本 -->
         </dependency>
 
     </dependencies>

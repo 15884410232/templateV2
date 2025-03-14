@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.dtsw.collect.mapper")
+@MapperScan("com.dtsw.**.mapper")
 public class MybatisConfig {
 
     @Bean

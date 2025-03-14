@@ -17,7 +17,7 @@ public class NpmPackage {
     private String readme;
     private Time time;
     private Map<String, Version> versions;
-    private Bugs bugs;
+//    private Bugs bugs;
     private String homepage;
     private List<String> keywords;
     private Repository repository;
@@ -62,9 +62,9 @@ public class NpmPackage {
         private Bugs bugs;
         private String unpkg;
         private String style;
-        private Dependencies dependencies;
-        private Dependencies peerDependencies;
-        private Dependencies devDependencies;
+        private List<Dependencies> dependencies;
+//        private Dependencies peerDependencies;
+//        private Dependencies devDependencies;
         private String gitHead;
         private String id;
         private String npmVersion;
@@ -113,12 +113,8 @@ public class NpmPackage {
 
         @Data
         public static class Dependencies {
-            private String asyncValidator;
-            private String babelHelperVueJsxMergeProps;
-            private String deepmerge;
-            private String normalizeWheel;
-            private String resizeObserverPolyfill;
-            private String throttleDebounce;
+            private String name;
+            private String version;
         }
 
         @Data
